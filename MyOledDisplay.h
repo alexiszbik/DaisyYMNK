@@ -52,7 +52,7 @@ class MyOledDisplay : public OneBitGraphicsDisplayImpl<MyOledDisplay<DisplayDriv
     */
     void Update() override { driver_.Update(); }
 
-    void Update(int i) { driver_.Update( i); }
+    void Update(int i) { driver_.Update(i); }
 
   private:
     DisplayDriver driver_;

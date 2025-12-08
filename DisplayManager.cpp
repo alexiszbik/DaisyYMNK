@@ -1,89 +1,78 @@
-
 #include "DisplayManager.h"
 
 DisplayManager* DisplayManager::singleton = nullptr;
 
-DisplayManager *DisplayManager::GetInstance()
+DisplayManager* DisplayManager::GetInstance()
 {
-    if(singleton == nullptr){
+    if(!singleton)
         singleton = new DisplayManager();
-    }
     return singleton;
 }
 
-void DisplayManager::Init(DaisySeed *hw) {
-    /** Configure the Display */
+DisplayManager::DisplayManager() {}
+
+void DisplayManager::Init(DaisySeed* hw)
+{
     Display_t::Config disp_cfg;
     disp_cfg.driver_config.transport_config.Defaults();
     disp_cfg.driver_config.transport_config.i2c_config.pin_config.scl = hw->GetPin(11);
     disp_cfg.driver_config.transport_config.i2c_config.pin_config.sda = hw->GetPin(12);
-    
-    /** And Initialize */
+
     display.Init(disp_cfg);
+    display.Fill(false);
+    display.Update();
 }
 
-void DisplayManager::Write(vector<string> messages, bool now) {
-    this->messages = messages;
-    if (now) {
+void DisplayManager::Write(const char* l0, const char* l1, const char* l2, const char* l3, bool now)
+{
+    setLine(0, l0);
+    setLine(1, l1);
+    setLine(2, l2);
+    setLine(3, l3);
+
+    if(now)
+    {
         Prepare();
         display.Update();
-    } else {
+    }
+    else
+    {
         needsUpdate = true;
     }
-    lastMessageType = strings;
 }
 
-void DisplayManager::Prepare() {
+void DisplayManager::WriteNow(const char* l0, const char* l1, const char* l2, const char* l3)
+{
+    Write(l0, l1, l2, l3, true);
+}
 
+void DisplayManager::Update()
+{
+    if(needsUpdate)
+    {
+        Prepare();
+        display.Update();
+        needsUpdate = false;
+    }
+}
+
+void DisplayManager::setLine(int idx, const char* str)
+{
+    if(!str) { lines[idx][0] = 0; return; }
+    strncpy(lines[idx], str, sizeof(lines[idx])-1);
+    lines[idx][sizeof(lines[idx])-1] = 0;
+}
+
+void DisplayManager::Prepare()
+{
     display.Fill(false);
-    if (lastMessageType == parameterValue) {
-        /*
-        char buffer[8];
-        parameter->getValueToStr(buffer, sizeof buffer);
-        
-        display.SetCursor(0, 0);
-        display.WriteString(parameter->name, Font_11x18, true);
-        display.SetCursor(0, fontHeight);
-        display.WriteString(buffer, Font_7x10, true);
-        */
-    } else {
-        short iterator = 0;
-        for (auto str : messages) {
-            if (iterator <= 2) {
-                display.SetCursor(0, fontHeight * iterator);
-                display.WriteString(str.c_str(), Font_11x18, true);
-            }
-        iterator++;
+    for(int i=0;i<4;i++)
+    {
+        if(lines[i][0] != 0)
+        {
+            display.SetCursor(0, i*fontHeight);
+            display.WriteString(lines[i], Font_11x18, true);
         }
     }
     needsUpdate = false;
 }
-
-void DisplayManager::Update() {
-    switch (pipe) {
-        case idle :
-        {
-            currentLine = 0;
-            if (needsUpdate) {
-                pipe = ready;
-            }
-            
-        }
-        break;
-        case ready :
-        {
-            Prepare();
-            pipe = update;
-        }
-        break;
-        case update : {
-            display.Update(currentLine++);
-            if (currentLine >= 8*128) {
-                pipe = idle;
-                
-            }
-        }
-        break;
-    }
-}
-

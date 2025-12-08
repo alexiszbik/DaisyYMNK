@@ -1,16 +1,14 @@
-
-#ifndef DISPLAY_MANAGER_H
-#define DISPLAY_MANAGER_H
-
+#pragma once
 #include "daisy_seed.h"
 #include "dev/oled_ssd130x.h"
 
 #include <string>
-#include <vector>
 
 #include "MyOledDisplay.h"
 #include "MyTransport.h"
 #include "UpdatedDriver.h"
+
+using namespace daisy;
 
 using OLEDDriver
     = UpdatedDriver<128, 64, MyTransport>;
@@ -21,45 +19,26 @@ using namespace std;
 
 class DisplayManager
 {
-protected:
-    enum EMessageType {
-        strings,
-        parameterValue
-    };
-
-    enum EPipe {
-        idle,
-        ready,
-        update
-    };
-
-private:
-    DisplayManager() {};
-
-    static DisplayManager* singleton;
 public:
-    static DisplayManager *GetInstance();
+    static DisplayManager* GetInstance();
 
+    void Init(DaisySeed* hw);
 
-    void Init(DaisySeed *hw);
-    void Write(vector<string> messages, bool now = false);
-    void Prepare();
+    void Write(const char* l0=nullptr, const char* l1=nullptr, const char* l2=nullptr, const char* l3=nullptr, bool now=false);
+    void WriteNow(const char* l0=nullptr, const char* l1=nullptr, const char* l2=nullptr, const char* l3=nullptr);
 
     void Update();
-    
+
 private:
+    DisplayManager();
+    static DisplayManager* singleton;
+
     Display_t display;
-    const int fontHeight = 18;
-
+    static constexpr int fontHeight = 18;
     bool needsUpdate = false;
-    EMessageType lastMessageType = strings;
 
-    vector<string> messages;
+    char lines[4][32] = {{0}}; // buffers internes pour chaque ligne
 
-    int currentLine = 0;
-    EPipe pipe = idle;
-
+    void setLine(int idx, const char* str);
+    void Prepare();
 };
-
-
-#endif //DISPLAY_MANAGER_H

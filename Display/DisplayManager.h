@@ -34,7 +34,7 @@ private:
     static DisplayManager* singleton;
 
     Display_t display;
-    static constexpr int fontHeight = 18;
+    static constexpr int fontHeight = 16;
     bool needsUpdate = false;
 
     char lines[4][32] = {{0}}; // buffers internes pour chaque ligne

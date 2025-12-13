@@ -71,7 +71,7 @@ void DisplayManager::Prepare()
         if(lines[i][0] != 0)
         {
             display.SetCursor(0, i*fontHeight);
-            display.WriteString(lines[i], Font_11x18, true);
+            display.WriteString(lines[i], Font_7x10, true);
         }
     }
     needsUpdate = false;

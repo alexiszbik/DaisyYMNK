@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Common/InlineMath.h"
+#include "Common/Note.h"
+
 #include "Display/DisplayManager.h"
 
 #include "Mux/Mux16.h"

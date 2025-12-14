@@ -9,6 +9,7 @@
 */
 
 #include "ModuleCore.h"
+#include <cmath>
 
 namespace ydaisy {
 

@@ -4,7 +4,6 @@
 #include "Common/Note.h"
 
 #include "Display/DisplayManager.h"
-
 #include "Mux/Mux16.h"
 
 #include "DSP/DSPKernel.h"

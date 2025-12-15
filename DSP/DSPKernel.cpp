@@ -9,7 +9,7 @@
 */
 
 #include "DSPKernel.h"
-
+#include <cmath>
 
 namespace ydaisy {
 
@@ -18,6 +18,9 @@ DSPKernel::DSPKernel(vector<ParameterDesc> parameterDescriptors)
     for (auto& paramDesc : parameterDescriptors) {
         Parameter* p = new Parameter(paramDesc);
         parameters.push_back(p);
+    }
+    if (parameters.size()) {
+        lastChangedParameter = parameters.front();
     }
 }
 
@@ -29,11 +32,21 @@ DSPKernel::~DSPKernel() {
 }
 
 void DSPKernel::setParameterValue(int index, float value) {
-    parameters.at(index)->setValue(value);
+    auto param = parameters.at(index);
+
+    if (fabs(param->getValue() - value) > 0.005) {
+        lastChangedParameter = param;
+    }
+
+    param->setValue(value);
     
     if (parameters.at(index)->useSmoothValue() == false) {
         updateParameter(index, parameters.at(index)->getValue());
     }
+}
+
+Parameter* DSPKernel::getLastChangedParameter() {
+    return lastChangedParameter;
 }
 
 void DSPKernel::loadPreset(Preset* preset) {

@@ -61,6 +61,7 @@ private:
 
     bool useMux = false;
     static constexpr uint8_t muxSize = 16;
+    uint8_t muxIdxRead = 0;
 
     float muxValues[muxSize];
     int muxIndexes[muxSize];

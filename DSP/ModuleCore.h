@@ -42,6 +42,7 @@ public:
     float getDSPValue(unsigned int index);
     
     vector<Parameter*> getAllParameters();
+    Parameter* getLastChangedParameter();
     
 protected:
     void lockHID(unsigned int index);

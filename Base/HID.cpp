@@ -58,12 +58,10 @@ void HID::init(DaisySeed &hw) {
 
 void HID::process(DaisySeed &hw, ModuleCore* core) {
     
-    mux->ReadAll(muxValues);
-    
-    uint8_t i = muxIndexCount;
-    while (i--) {
-        core->setHIDValue(muxIndexes[i], muxValues[i]);
-    }
+    muxValues[muxIdxRead] = mux->Read(muxIdxRead);
+    core->setHIDValue(muxIndexes[muxIdxRead], muxValues[muxIdxRead]);
+
+    muxIdxRead = (muxIdxRead + 1) % muxSize;
 
     int k = 0;
     int offset = useMux ? 1 : 0;

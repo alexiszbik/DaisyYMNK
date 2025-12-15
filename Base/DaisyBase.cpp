@@ -97,7 +97,6 @@ void DaisyBase::listen() {
     }
 
     readHID();
-    System::Delay(1);
 }
 
 void DaisyBase::process(float** buf, int frameCount) {

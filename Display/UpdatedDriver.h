@@ -127,10 +127,7 @@ class UpdatedDriver
 
     void Fill(bool on)
     {
-        for(size_t i = 0; i < sizeof(buffer_); i++)
-        {
-            buffer_[i] = on ? 0xff : 0x00;
-        }
+        memset(buffer_, on ? 0xFF : 0x00, sizeof(buffer_));
     };
 
     void Update(int i) {
@@ -138,27 +135,15 @@ class UpdatedDriver
         int j = int(i/width);
 
         if (pix == 0) {
-            
-            uint8_t high_column_addr;
-            switch(height)
-            {
-                case 32: high_column_addr = 0x12; break;
-
-                default: high_column_addr = 0x10; break;
-            }
+            uint8_t high_column_addr = (height == 32) ? 0x12 : 0x10;
             transport_.SendCommand(0xB0 + j);
             transport_.SendCommand(0x00);
             transport_.SendCommand(high_column_addr);
         }
         
-
         transport_.SendDataPerPixel(&buffer_[width * j], pix);
-        //transport_.SendDataPerPixel(&buffer_[width * i], i);
     }
 
-    /**
-     * Update the whole display 
-    */
     void Update()
     {
         uint8_t i;
@@ -176,7 +161,6 @@ class UpdatedDriver
             transport_.SendCommand(0x00);
             transport_.SendCommand(high_column_addr);
             transport_.SendData(&buffer_[width * i], width);
-            
         }
     };
 

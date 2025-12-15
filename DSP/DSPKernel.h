@@ -45,6 +45,7 @@ public:
     float getUIValue(int index);
     
     vector<Parameter*> getAllParameters();
+    Parameter* getLastChangedParameter();
     
     void loadPreset(Preset* preset);
     
@@ -61,6 +62,7 @@ protected:
     
 private:
     vector<Parameter*> parameters;
+    Parameter* lastChangedParameter = nullptr;
 };
 
 }

@@ -46,7 +46,7 @@ float Parameter::getValue() {
     return currentValue;
 }
 
-float Parameter::getUIValue() {
+float Parameter::getUIValue() const noexcept {
     if (smoothValue) {
         return smoothValue->getGoal();
     } else {

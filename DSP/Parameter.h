@@ -26,7 +26,7 @@ public:
     void setValue(float value);
     void update();
     float getValue();
-    float getUIValue();
+    float getUIValue() const noexcept;
     
     bool useSmoothValue();
     

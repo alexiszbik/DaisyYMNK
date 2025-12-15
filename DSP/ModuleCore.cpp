@@ -82,4 +82,8 @@ vector<Parameter*> ModuleCore::getAllParameters() {
     return dspKernel->getAllParameters();
 }
 
+Parameter* ModuleCore::getLastChangedParameter() {
+    return dspKernel->getLastChangedParameter();
+}
+
 }

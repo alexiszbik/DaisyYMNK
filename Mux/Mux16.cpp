@@ -1,10 +1,7 @@
 #include "Mux16.h"
 
 Mux16::Mux16() {
-    uint8_t k = 16;
-    while(k--) {
-        last_[k] = 0;
-    }
+    
 }
 
 void Mux16::Init(AdcHandle* adc_handle,
@@ -30,8 +27,10 @@ void Mux16::Init(AdcHandle* adc_handle,
     init_gpio(s2_, s2);
     init_gpio(s3_, s3);
 
-    for(int i = 0; i < 16; i++)
-        last_[i] = 0.0f;
+    uint8_t k = 16;
+    while(k--) {
+        last_[k] = 0;
+    }
 }
 
 void Mux16::Select(uint8_t ch)
@@ -58,8 +57,3 @@ float Mux16::Read(uint8_t channel)
     return v;//last_[channel];
 }
 
-void Mux16::ReadAll(float* buffer) //Read All ? More one value at a time
-{
-    buffer[chReadIdx] = Read(chReadIdx);
-    chReadIdx = (chReadIdx + 1) % 16;
-}

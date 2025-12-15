@@ -5,9 +5,9 @@ using namespace daisy;
 
 class Mux16
 {
-  public:
+public:
+    Mux16();
     void Init(AdcHandle* adc_handle,
-              Pin adc_pin,
               Pin s0,
               Pin s1,
               Pin s2,
@@ -25,4 +25,5 @@ class Mux16
     dsy_gpio s0_, s1_, s2_, s3_;
 
     float last_[16];
+    uint8_t chReadIdx = 0;
 };

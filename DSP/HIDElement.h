@@ -26,14 +26,26 @@ enum HIDType {
     kGateInput,
 };
 
+struct HIDPin {
+    unsigned int pin;
+    bool isMux = false;
+    unsigned int muxId = 0;
+    
+    HIDPin(unsigned int pin) : pin(pin) {
+    }
+    HIDPin(unsigned int muxId, unsigned int pin) : pin(pin), muxId(muxId) {
+        isMux = true;
+    }
+};
+
 struct HIDElement {
     unsigned int index;
     HIDType type;
-    unsigned int pin;
+    HIDPin pin;
     const char* name;
     
     bool requireAdc() {
-        return type == kKnob || type == kRotary8;
+        return !pin.isMux && (type == kKnob || type == kRotary8);
     }
 };
 

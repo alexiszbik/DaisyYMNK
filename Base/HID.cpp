@@ -10,20 +10,45 @@ void HID::init(DaisySeed &hw) {
         if (hidElmt.requireAdc()) {
             adcCount++;
         }
+        if (hidElmt.pin.isMux) {
+            useMux = true;
+        }
+    }
+
+    if (useMux) {
+        adcCount++;
     }
 
     AdcChannelConfig adcConfig[adcCount];
 
     for (auto& hidElmt : desc) {
-        auto pin = hw.GetPin(hidElmt.pin);
 
-        if (hidElmt.type == kLed) {
-            leds.push_back(new HIDLed(hidElmt.index, pin));
-        } else if (hidElmt.requireAdc()) {
-            adcConfig[adcIndexes.size()].InitSingle(pin);
-            adcIndexes.push_back(hidElmt.index);
+        //Create Mux if we need one !
+        //Right now it only works with 1 unique mux
+        if (hidElmt.pin.isMux) {    
+            if (mux == nullptr) {
+                mux = new Mux16();
+                mux->Init(&adcHandle,
+                    seed::D0,// S0
+                    seed::D1,// S1
+                    seed::D2,// S2
+                    seed::D3 // S3
+                );
+                adcConfig[0].InitSingle(seed::A0);
+            }
+            muxIndexes[hidElmt.pin.pin] = hidElmt.index;  
+            muxIndexCount++;                
         } else {
-            buttons.push_back(new HIDButton(hidElmt.index, pin));
+            auto pin = hw.GetPin(hidElmt.pin.pin);
+
+            if (hidElmt.type == kLed) {
+                leds.push_back(new HIDLed(hidElmt.index, pin));
+            } else if (hidElmt.requireAdc()) {
+                adcConfig[adcIndexes.size() + (useMux ? 1 : 0)].InitSingle(pin);
+                adcIndexes.push_back(hidElmt.index);
+            } else {
+                buttons.push_back(new HIDButton(hidElmt.index, pin));
+            }
         }
     }
 
@@ -32,11 +57,20 @@ void HID::init(DaisySeed &hw) {
 }
 
 void HID::process(DaisySeed &hw, ModuleCore* core) {
+    
+    mux->ReadAll(muxValues);
+    
+    uint8_t i = muxIndexCount;
+    while (i--) {
+        core->setHIDValue(muxIndexes[i], muxValues[i]);
+    }
 
     int k = 0;
+    int offset = useMux ? 1 : 0;
     for (auto &adcIdx : adcIndexes) {
-        float value = hw.adc.GetFloat(k++);
+        float value = hw.adc.GetFloat(k + offset);
         core->setHIDValue(adcIdx, value);
+        k++;
     }
 
     for (auto button : buttons) {

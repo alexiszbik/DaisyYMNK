@@ -26,7 +26,8 @@ public:
     virtual ~ModuleCore();
     
 public:
-    vector<HIDElement> getHIDDescription();
+
+    vector<HIDElement>& getHIDDescription();
     
     void init(int channelCount, double sampleRate);
     void process(float** buf, int frameCount);

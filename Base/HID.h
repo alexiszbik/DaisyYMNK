@@ -2,9 +2,9 @@
 
 #include "daisy_seed.h"
 #include "../DSP/ModuleCore.h"
+#include "../Mux/Mux16.h"
 
 using namespace daisy;
-using namespace std;
 using namespace ydaisy;
 
 struct HIDButton {
@@ -15,7 +15,7 @@ struct HIDButton {
     HIDButton(unsigned int index, dsy_gpio_pin pin) {
         sw = new Switch();
         int updateRate = 1000;
-        sw->Init(pin, updateRate, Switch::TYPE_MOMENTARY, Switch::POLARITY_NORMAL, Switch::PULL_UP);
+        sw->Init(pin, updateRate, Switch::TYPE_MOMENTARY, Switch::POLARITY_INVERTED, Switch::PULL_UP);
         this->index = index;
     }
 
@@ -56,5 +56,18 @@ private:
     vector<HIDButton*> buttons;
     vector<HIDLed*> leds;
     vector<int> adcIndexes;
+
+// --- Mux part
+
+    bool useMux = false;
+    static constexpr uint8_t muxSize = 16;
+
+    float muxValues[muxSize];
+    int muxIndexes[muxSize];
+    uint8_t muxIndexCount = 0; 
+
+    Mux16* mux = nullptr;
+
+    AdcHandle adcHandle;
 
 };

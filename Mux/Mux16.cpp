@@ -1,18 +1,19 @@
 #include "Mux16.h"
 
+Mux16::Mux16() {
+    uint8_t k = 16;
+    while(k--) {
+        last_[k] = 0;
+    }
+}
+
 void Mux16::Init(AdcHandle* adc_handle,
-                 Pin adc_pin,
                  Pin s0,
                  Pin s1,
                  Pin s2,
                  Pin s3)
 {
     adc_ = adc_handle;
-
-    AdcChannelConfig cfg;
-    cfg.InitSingle(adc_pin);
-    adc_->Init(&cfg, 1);
-    adc_->Start();
 
     adc_idx_ = 0;
 
@@ -47,18 +48,18 @@ float Mux16::Read(uint8_t channel)
         return 0.0f;
 
     Select(channel);
-    System::DelayUs(400);
+    System::DelayUs(550);
 
     float v = adc_->GetFloat(adc_idx_);
 
-    /*// Filtrage léger anti-bruit (lowpass simple)
+    /*// Filtering ?
     last_[channel] += 0.15f * (v - last_[channel]);*/
 
     return v;//last_[channel];
 }
 
-void Mux16::ReadAll(float* buffer)
+void Mux16::ReadAll(float* buffer) //Read All ? More one value at a time
 {
-    for(uint8_t i = 0; i < 16; i++)
-        buffer[i] = Read(i);
+    buffer[chReadIdx] = Read(chReadIdx);
+    chReadIdx = (chReadIdx + 1) % 16;
 }

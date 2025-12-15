@@ -95,12 +95,12 @@ void DaisyBase::listen() {
     {
         handleMidiMessage(midi.PopEvent());
     }
+
+    readHID();
     System::Delay(1);
 }
 
 void DaisyBase::process(float** buf, int frameCount) {
-
-    hid->process(hw, core);
 
 	core->process(buf, frameCount);
 #if TEST_MODE
@@ -108,4 +108,8 @@ void DaisyBase::process(float** buf, int frameCount) {
         buf[0][i] += testOsc.Process();
     }
 #endif
+}
+
+void DaisyBase::readHID() {
+    hid->process(hw, core);
 }

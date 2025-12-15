@@ -21,7 +21,7 @@ ModuleCore::~ModuleCore() {
     delete dspKernel;
 }
 
-vector<HIDElement> ModuleCore::getHIDDescription() {
+vector<HIDElement>& ModuleCore::getHIDDescription() {
     return hidDesc;
 }
 

@@ -24,6 +24,7 @@ public:
     void init(AudioHandle::AudioCallback cb);
     void listen();
     void process(float** buf, int frameCount);
+    void readHID();
 
 private:
     void initMidi();

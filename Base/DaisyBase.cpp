@@ -1,6 +1,6 @@
 #include "DaisyBase.h"
 
-DaisyBase::DaisyBase(ModuleCore *core) : core(core) {
+DaisyBase::DaisyBase(DaisySeed* hw, ModuleCore *core) : hw(hw), core(core) {
     hid = new HID(core->getHIDDescription());
 }
 
@@ -24,7 +24,7 @@ void DaisyBase::handleMidiMessage(MidiEvent m)
             NoteOnEvent p = m.AsNoteOn();
 		
             core->processMIDI(MIDIMessageType::kNoteOn, p.channel, p.note, p.velocity);
-            hw.SetLed(p.velocity > 0);
+            hw->SetLed(p.velocity > 0);
         }
         break;
 
@@ -33,7 +33,7 @@ void DaisyBase::handleMidiMessage(MidiEvent m)
             NoteOffEvent p = m.AsNoteOff();
             
             core->processMIDI(MIDIMessageType::kNoteOff, p.channel, p.note, 0);
-			hw.SetLed(false);
+			hw->SetLed(false);
         }
         break;
 
@@ -64,15 +64,16 @@ void DaisyBase::handleMidiMessage(MidiEvent m)
 
 void DaisyBase::init(AudioHandle::AudioCallback cb) {
 
-    hw.Init();
-    hw.SetLed(true);
+    hw->Configure();
+    hw->Init();
+    hw->SetLed(true);
 
-	hw.SetAudioBlockSize(128); // number of samples handled per callback
-	hw.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
+	hw->SetAudioBlockSize(128); // number of samples handled per callback
+	hw->SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
 
-	core->init(2, hw.AudioSampleRate());
+	core->init(2, hw->AudioSampleRate());
 
-    hid->init(hw);
+    hid->init(*hw);
 #if TEST_MODE
     testOsc.Init(hw.AudioSampleRate());
     testOsc.SetFreq(440);
@@ -80,9 +81,7 @@ void DaisyBase::init(AudioHandle::AudioCallback cb) {
 
     System::Delay(1000); // as if something wrong happenend ....
 
-	hw.StartAudio(cb);
-
-    //int updateRate = 1000;
+	hw->StartAudio(cb);
 	
 	initMidi();
     midi.StartReceive();
@@ -110,5 +109,5 @@ void DaisyBase::process(float** buf, int frameCount) {
 }
 
 void DaisyBase::readHID() {
-    hid->process(hw, core);
+    hid->process(*hw, core);
 }

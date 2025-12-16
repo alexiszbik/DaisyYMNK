@@ -13,11 +13,10 @@ using namespace daisysp;
 using namespace ydaisy;
 
 static MidiUartHandler midi;
-static DaisySeed hw;
 
 class DaisyBase {
 public:
-    DaisyBase(ModuleCore *core);
+    DaisyBase(DaisySeed* hw, ModuleCore *core);
 
     ~DaisyBase();
 
@@ -33,6 +32,7 @@ private:
 private:
     ModuleCore* core;
     HID* hid;
+    DaisySeed* hw;
 #if TEST_MODE
     Oscillator testOsc;
 #endif

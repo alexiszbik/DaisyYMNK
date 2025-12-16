@@ -33,7 +33,7 @@ DSPKernel::~DSPKernel() {
 
 void DSPKernel::setParameterValue(int index, float value) {
     auto param = parameters.at(index);
-
+//TODO => should be done on HID side !
     if (fabs(param->getValue() - value) > 0.005) {
         lastChangedParameter = param;
     }
@@ -48,8 +48,8 @@ void DSPKernel::setParameterValue(int index, float value) {
 Parameter* DSPKernel::getLastChangedParameter() {
     return lastChangedParameter;
 }
-
-void DSPKernel::loadPreset(Preset* preset) {
+/*
+void DSPKernel::loadPreset(Preset<const char*>* preset) {
     for (auto presetParam : *preset) {
         int index = 0;
         for (auto p : parameters) {
@@ -59,6 +59,14 @@ void DSPKernel::loadPreset(Preset* preset) {
             }
             index++;
         }
+    }
+}
+*/
+
+void DSPKernel::loadPreset(const float* preset) {
+    uint8_t k = getParameterCount();
+    while(k--) {
+        setParameterValue(k, preset[k]);
     }
 }
 

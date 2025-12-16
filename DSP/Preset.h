@@ -12,9 +12,31 @@
 
 using namespace std;
 
-struct PresetParameter {
-    const char* name;
+template<typename PresetT> class PresetParameter {
+public:
+    PresetT name;
     float value;
 };
 
-typedef vector<PresetParameter> Preset;
+template<typename PresetT, size_t MaxParams = 64>
+class Preset
+{
+public:
+    PresetParameter<PresetT> params[MaxParams];
+    size_t count = 0;
+
+    Preset(std::initializer_list<PresetParameter<PresetT>> init)
+    {
+        for(const auto& p : init)
+        {
+            if(count < MaxParams)
+                params[count++] = p;
+        }
+    }
+
+    const PresetParameter<PresetT>* begin() const { return params; }
+    const PresetParameter<PresetT>* end()   const { return params + count; }
+
+    size_t size() const { return count; }
+};
+

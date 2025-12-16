@@ -47,7 +47,8 @@ public:
     vector<Parameter*> getAllParameters();
     Parameter* getLastChangedParameter();
     
-    void loadPreset(Preset* preset);
+    //void loadPreset(Preset<const char*>* preset);
+    void loadPreset(const float* preset);
     
     void dumpParameters();
     

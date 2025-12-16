@@ -62,6 +62,9 @@ void ModuleCore::setHIDValue(unsigned int index, float value) {
         if (!state->isLock) {
             state->value = value;
             updateHIDValue(index, value);
+            if (valueChangedCallback) {
+                valueChangedCallback(index, value);
+            }
         }
     }
 }

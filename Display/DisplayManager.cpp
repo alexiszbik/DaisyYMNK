@@ -109,9 +109,9 @@ void DisplayManager::Update() {
 
 void DisplayManager::setLine(int idx, const char* str)
 {
+    updatedLine[idx] = true;
     if(!str) { lines[idx][0] = 0; return; }
     strncpy(lines[idx], str, sizeof(lines[idx])-1);
-    updatedLine[idx] = true;
     lines[idx][sizeof(lines[idx])-1] = 0;
 }
 

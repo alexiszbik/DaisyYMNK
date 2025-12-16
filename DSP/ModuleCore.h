@@ -20,13 +20,14 @@ struct HIDState {
     bool isLock = false;
 };
 
+
 class ModuleCore {
+    
 public:
     ModuleCore(DSPKernel* kernel, vector<HIDElement> hidDescription, int midiChannel = -1);
     virtual ~ModuleCore();
     
 public:
-
     vector<HIDElement>& getHIDDescription();
     
     void init(int channelCount, double sampleRate);
@@ -44,6 +45,8 @@ public:
     vector<Parameter*> getAllParameters();
     Parameter* getLastChangedParameter();
     
+    void setValueChangedCallback(void (*cb)(uint8_t, float)) { valueChangedCallback = cb; }
+    
 protected:
     void lockHID(unsigned int index);
     
@@ -53,6 +56,8 @@ protected:
 protected:
     DSPKernel* dspKernel;
     int midiChannel = -1;
+    
+    void (*valueChangedCallback)(uint8_t, float) = nullptr;
     
 private:
     vector<HIDElement> hidDesc;

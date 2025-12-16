@@ -56,12 +56,17 @@ void HID::init(DaisySeed &hw) {
     hw.adc.Start();
 }
 
-void HID::process(DaisySeed &hw, ModuleCore* core) {
-    
-    muxValues[muxIdxRead] = mux->Read(muxIdxRead);
+void HID::readMux(uint8_t channel, ModuleCore* core) {
+    muxValues[channel] = mux->Read(channel);
     core->setHIDValue(muxIndexes[muxIdxRead], muxValues[muxIdxRead]);
+}
 
-    muxIdxRead = (muxIdxRead + 1) % muxSize;
+void HID::process(DaisySeed &hw, ModuleCore* core) {
+
+    if (useMux) {
+        readMux(muxIdxRead, core);
+        muxIdxRead = (muxIdxRead + 1) % muxSize;
+    }
 
     int k = 0;
     int offset = useMux ? 1 : 0;

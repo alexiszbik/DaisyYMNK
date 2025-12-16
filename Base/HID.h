@@ -51,6 +51,10 @@ public:
     void process(DaisySeed &hw, ModuleCore* core);
 
 private:
+    void readMux(uint8_t channel, ModuleCore* core);
+    void readAllMux(ModuleCore* core);
+
+private:
     vector<HIDElement> desc;
 
     vector<HIDButton*> buttons;

@@ -18,6 +18,7 @@ struct Note {
 
     Note(int pitch, int velocity, unsigned long timeStamp) : pitch(pitch), velocity(velocity), timeStamp(timeStamp) {}
     Note(const Note& a) : pitch(a.pitch), velocity(a.velocity), timeStamp(a.timeStamp) {}
+    Note() {}
     /*
     bool operator == (Note const& a) {
         return true;

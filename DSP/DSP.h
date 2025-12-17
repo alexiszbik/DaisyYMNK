@@ -11,3 +11,5 @@
 #include "Preset.h"
 #include "SignalProcessing.h"
 #include "SmoothValue.h"
+
+#include "Env/AttackDecay.h"

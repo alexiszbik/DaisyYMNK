@@ -3,9 +3,9 @@
 
 #define PRESET_FLASH_ADDR  0x90000000
 #define PRESET_SECTOR_SIZE 4096
-#define MAX_PRESET_SIZE    64
-#pragma once
-#include "daisy_seed.h"
+#define MAX_PRESET_SIZE    64   // floats par preset
+#define MAX_PRESETS        16
+#define PRESET_MAGIC       0xDEADBEEF
 
 using namespace daisy;
 
@@ -17,28 +17,41 @@ public:
         this->hw = hw;
     }
 
-    bool Save(const float* preset, uint8_t size) //Return true if success !!
+    bool Save(const float* preset, uint8_t size, uint8_t index)
     {
-        if(!hw)
+        if(!hw || index >= MAX_PRESETS)
             return false;
 
-        if(size > MAX_PRESET_SIZE)
-            size = MAX_PRESET_SIZE;
+        if(size > MAX_PRESET_SIZE - 1)
+            size = MAX_PRESET_SIZE - 1; //Size minus magic
 
-        const size_t byte_size = size * sizeof(float);
+        const uint32_t addr = PRESET_FLASH_ADDR + index * PRESET_SECTOR_SIZE;
 
-
-        if (hw->qspi.Erase(PRESET_FLASH_ADDR, PRESET_FLASH_ADDR + PRESET_SECTOR_SIZE) != QSPIHandle::Result::OK) {
+        if(hw->qspi.Erase(addr, addr + PRESET_SECTOR_SIZE) != QSPIHandle::Result::OK)
             return false;
-        }
 
-        return hw->qspi.Write(PRESET_FLASH_ADDR, byte_size, (uint8_t*)preset) == QSPIHandle::Result::OK;
+        // Write magic number
+        uint32_t magic = PRESET_MAGIC;
+        if(hw->qspi.Write(addr, sizeof(magic), (uint8_t*)&magic) != QSPIHandle::Result::OK)
+            return false;
+
+        // Write floats
+        return hw->qspi.Write(addr + sizeof(magic), size * sizeof(float), (uint8_t*)preset) == QSPIHandle::Result::OK;
     }
 
-    const float* Load() const
+    // Retourne nullptr si preset non initialisé
+    const float* Load(uint8_t index) const
     {
-        // Lecture directe memory-mapped
-        return reinterpret_cast<const float*>(PRESET_FLASH_ADDR);
+        if(!hw || index >= MAX_PRESETS)
+            return nullptr;
+
+        const uint32_t addr = PRESET_FLASH_ADDR + index * PRESET_SECTOR_SIZE;
+        const uint32_t* magicPtr = reinterpret_cast<const uint32_t*>(addr);
+
+        if(*magicPtr != PRESET_MAGIC)
+            return nullptr; // preset non initialisé
+
+        return reinterpret_cast<const float*>(addr + sizeof(uint32_t));
     }
 
 private:

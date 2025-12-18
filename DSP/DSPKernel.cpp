@@ -9,6 +9,7 @@
 */
 
 #include "DSPKernel.h"
+#include "DaisyYMNK/DSP/SignalProcessing.h"
 #include <cmath>
 
 namespace ydaisy {
@@ -66,7 +67,7 @@ void DSPKernel::loadPreset(Preset<const char*>* preset) {
 void DSPKernel::loadPreset(const float* preset) {
     uint8_t k = getParameterCount();
     while(k--) {
-        setParameterValue(k, preset[k]);
+        setParameterValue(k, clamp(preset[k], 0.f, 1.f));
     }
 }
 

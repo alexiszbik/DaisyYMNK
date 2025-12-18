@@ -1,6 +1,4 @@
 #pragma once
-#include "daisy_seed.h"
-#include "dev/oled_ssd130x.h"
 
 #include <string>
 

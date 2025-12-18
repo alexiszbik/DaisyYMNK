@@ -11,7 +11,7 @@
 #pragma once
 
 #if defined __APPLE__
-#define _SIMULATOR_
+    #define _SIMULATOR_
 #endif
 
 #define xstr(s) str(s)

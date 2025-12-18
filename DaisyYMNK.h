@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Helpers/StrConverters.h"
+
+#include "DSP/Macros.h"
+
 #include "Common/InlineMath.h"
 #include "Common/Note.h"
 
@@ -8,7 +12,7 @@
 
 #include "DSP/DSPKernel.h"
 #include "DSP/HIDElement.h"
-#include "DSP/Macros.h"
+
 #include "DSP/ModuleCore.h"
 #include "DSP/Parameter.h"
 #include "DSP/ParameterDesc.h"

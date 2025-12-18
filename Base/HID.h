@@ -15,7 +15,7 @@ struct HIDButton {
     HIDButton(unsigned int index, dsy_gpio_pin pin) {
         sw = new Switch();
         int updateRate = 1000;
-        sw->Init(pin, updateRate, Switch::TYPE_MOMENTARY, Switch::POLARITY_INVERTED, Switch::PULL_UP);
+        sw->Init(pin, updateRate, Switch::TYPE_MOMENTARY, Switch::POLARITY_NORMAL, Switch::PULL_UP);
         this->index = index;
     }
 

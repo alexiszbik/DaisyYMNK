@@ -20,7 +20,6 @@ struct HIDState {
     bool isLock = false;
 };
 
-
 class ModuleCore {
     
 public:
@@ -44,13 +43,15 @@ public:
     
     vector<Parameter*> getAllParameters();
     Parameter* getLastChangedParameter();
-    
+
+    //Do we keep this ?
     void setValueChangedCallback(void (*cb)(uint8_t, float)) { valueChangedCallback = cb; }
     
 protected:
     void lockHID(unsigned int index);
     
 protected:
+    //This is the method to override to transmit things to the DSP
     virtual void updateHIDValue(unsigned int index, float value) = 0;
 
 protected:
@@ -62,6 +63,10 @@ protected:
 private:
     vector<HIDElement> hidDesc;
     vector<HIDState> hidState;
+    
+#if !defined _SIMULATOR_
+   
+#endif
     
 };
 

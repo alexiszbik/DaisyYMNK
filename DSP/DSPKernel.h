@@ -44,7 +44,7 @@ public:
     const char* getParameterName(int index);
     float getUIValue(int index);
     
-    vector<Parameter*> getAllParameters();
+    const std::vector<Parameter*>& getAllParameters() const noexcept;
     Parameter* getLastChangedParameter();
     
     //void loadPreset(Preset<const char*>* preset);

@@ -129,7 +129,7 @@ void DSPKernel::updateParameters() {
     }
 }
 
-vector<Parameter*> DSPKernel::getAllParameters() {
+const std::vector<Parameter*>& DSPKernel::getAllParameters() const noexcept {
     return parameters;
 }
 

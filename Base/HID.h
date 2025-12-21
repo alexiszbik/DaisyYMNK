@@ -52,7 +52,6 @@ public:
 
 private:
     void readMux(uint8_t channel, ModuleCore* core);
-    void readAllMux(ModuleCore* core);
 
 private:
     vector<HIDElement> desc;

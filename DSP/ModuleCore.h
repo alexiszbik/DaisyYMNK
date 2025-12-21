@@ -47,11 +47,8 @@ public:
     
     vector<HIDElement>& getHIDDescription();
     
-    vector<Parameter*> getAllParameters();
+    const std::vector<Parameter*>& getAllParameters() const noexcept;
     Parameter* getLastChangedParameter();
-
-    //Do we keep this ?
-    void setValueChangedCallback(void (*cb)(uint8_t, float)) { valueChangedCallback = cb; }
     
 protected:
     void lockHID(unsigned int index);
@@ -66,8 +63,6 @@ protected:
     
     IPresetManager* presetManager = nullptr;
     IDisplayManager* displayManager = nullptr;
-    
-    void (*valueChangedCallback)(uint8_t, float) = nullptr;
     
 private:
     vector<HIDElement> hidDesc;

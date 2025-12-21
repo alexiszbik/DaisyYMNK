@@ -5,8 +5,6 @@
 
 #define PRESET_FLASH_ADDR  0x90000000
 #define PRESET_SECTOR_SIZE 4096
-#define MAX_PRESET_SIZE    64   // floats par preset
-#define MAX_PRESETS        16
 #define PRESET_MAGIC       0xDEADBEEF
 
 using namespace daisy;

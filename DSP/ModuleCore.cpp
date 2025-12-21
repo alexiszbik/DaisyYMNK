@@ -65,9 +65,6 @@ void ModuleCore::setHIDValue(unsigned int index, float value) {
         if (!state->isLock) {
             state->value = value;
             updateHIDValue(index, value);
-            if (valueChangedCallback) {
-                valueChangedCallback(index, value);
-            }
         }
     }
 }
@@ -84,7 +81,7 @@ void ModuleCore::setDSPValue(unsigned int index, float value) {
     dspKernel->setParameterValue(index, value);
 }
 
-vector<Parameter*> ModuleCore::getAllParameters() {
+const std::vector<Parameter*>& ModuleCore::getAllParameters() const noexcept {
     return dspKernel->getAllParameters();
 }
 

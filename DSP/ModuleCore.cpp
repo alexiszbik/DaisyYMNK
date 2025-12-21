@@ -21,6 +21,9 @@ ModuleCore::~ModuleCore() {
     delete dspKernel;
 }
 
+void ModuleCore::setDisplayManager(IDisplayManager* inDisplayManager) { this->displayManager = inDisplayManager; }
+void ModuleCore::setPresetManager(IPresetManager* inPresetManager)  { this->presetManager = inPresetManager; }
+
 vector<HIDElement>& ModuleCore::getHIDDescription() {
     return hidDesc;
 }

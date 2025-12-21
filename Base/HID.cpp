@@ -25,6 +25,8 @@ void HID::init(DaisySeed &hw) {
 
         //Create Mux if we need one !
         //Right now it only works with 1 unique mux
+        //and mux pins are always the same ...
+        //which is not good if I want to use SD Card because it uses the same pins right now ... :|
         if (hidElmt.pin.isMux) {    
             if (mux == nullptr) {
                 mux = new Mux16();
@@ -79,7 +81,9 @@ void HID::process(DaisySeed &hw, ModuleCore* core) {
     for (auto button : buttons) {
         button->sw->Debounce();
         bool state = button->sw->Pressed();
-        if (state != button->previousState && state) {
+        if (state != button->previousState && state) { 
+            //maybe it would be better to pass 1 && 0
+            //in case of continuous push button
             core->setHIDValue(button->index, 1);
         }
         button->previousState = state;

@@ -21,6 +21,9 @@ public:
     ~DaisyBase();
 
     void init(AudioHandle::AudioCallback cb);
+    void setDisplayManager(IDisplayManager* inDisplayManager);
+    void setPresetManager(IPresetManager* inPresetManager);
+    
     void listen();
     void process(float** buf, int frameCount);
     void readHID();
@@ -30,9 +33,10 @@ private:
     void handleMidiMessage(MidiEvent m);
 
 private:
+    DaisySeed* hw;
     ModuleCore* core;
     HID* hid;
-    DaisySeed* hw;
+    
 #if TEST_MODE
     Oscillator testOsc;
 #endif

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "daisy_seed.h"
+#include "IPresetManager.h"
 
 #define PRESET_FLASH_ADDR  0x90000000
 #define PRESET_SECTOR_SIZE 4096
@@ -10,7 +11,7 @@
 
 using namespace daisy;
 
-class PresetManager
+class PresetManager : public IPresetManager
 {
 public:
     void Init(DaisySeed* hw)
@@ -18,7 +19,7 @@ public:
         this->hw = hw;
     }
 
-    bool Save(const float* preset, uint8_t size, uint8_t index)
+    bool Save(const float* preset, uint8_t size, uint8_t index) override
     {
         if(!hw || index >= MAX_PRESETS)
             return false;
@@ -40,8 +41,7 @@ public:
         return hw->qspi.Write(addr + sizeof(magic), size * sizeof(float), (uint8_t*)preset) == QSPIHandle::Result::OK;
     }
 
-    // Retourne nullptr si preset non initialisé
-    const float* Load(uint8_t index) const
+    const float* Load(uint8_t index) const override
     {
         if(!hw || index >= MAX_PRESETS)
             return nullptr;
@@ -50,7 +50,7 @@ public:
         const uint32_t* magicPtr = reinterpret_cast<const uint32_t*>(addr);
 
         if(*magicPtr != PRESET_MAGIC)
-            return nullptr; // preset non initialisé
+            return nullptr; // prevent from reading bad values
 
         return reinterpret_cast<const float*>(addr + sizeof(uint32_t));
     }

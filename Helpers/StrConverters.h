@@ -1,23 +1,22 @@
 #pragma once
 
-
 // buffer MINIMUM: 8 chars -> "-123.45\0"
 inline void floatToCString2(float v, char* buf)
 {
-    // gestion du signe
+    // handle sign
     if (v < 0.0f)
     {
         *buf++ = '-';
         v = -v;
     }
 
-    // arrondi à 2 décimales
+    // round to 2 decimals
     int value = (int)(v * 100.0f + 0.5f);
 
     int intPart  = value / 100;
     int fracPart = value % 100;
 
-    // conversion partie entière (max 3–4 digits typiquement)
+    // convert integer part (max 3-4 digits typically)
     char tmp[6];
     int i = 0;
     do {
@@ -40,26 +39,26 @@ inline void intToCString2(int v, char* buf)
 {
     char* p = buf;
 
-    // gestion du signe
+    // handle sign
     if(v < 0)
     {
         *p++ = '-';
         v = -v;
     }
 
-    // limiter à 2 chiffres
+    // limit to 2 digits
     if(v > 99)
         v = 99;
 
-    // conversion des dizaines
+    // convert tens
     if(v >= 10)
     {
         *p++ = '0' + (v / 10);
     }
 
-    // conversion des unités
+    // convert units
     *p++ = '0' + (v % 10);
 
-    // terminaison de la chaîne
+    // string termination
     *p = '\0';
 }

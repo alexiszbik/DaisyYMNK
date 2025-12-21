@@ -87,6 +87,14 @@ void DaisyBase::init(AudioHandle::AudioCallback cb) {
     midi.StartReceive();
 }
 
+void DaisyBase::setDisplayManager(IDisplayManager* inDisplayManager) {
+    core->setDisplayManager(inDisplayManager);
+}
+
+void DaisyBase::setPresetManager(IPresetManager* inPresetManager) {
+    core->setPresetManager(inPresetManager);
+}
+
 void DaisyBase::listen() {
     midi.Listen();
 

@@ -13,6 +13,9 @@
 #include "HIDElement.h"
 #include "DSPKernel.h"
 
+#include "DaisyYMNK/QSPI/IPresetManager.h"
+#include "DaisyYMNK/Display/IDisplayManager.h"
+
 namespace ydaisy {
 
 struct HIDState {
@@ -27,10 +30,11 @@ public:
     virtual ~ModuleCore();
     
 public:
-    vector<HIDElement>& getHIDDescription();
-    
     void init(int channelCount, double sampleRate);
     void process(float** buf, int frameCount);
+    
+    void setDisplayManager(IDisplayManager* inDisplayManager);
+    void setPresetManager(IPresetManager* inPresetManager);
     
     virtual void processMIDI(MIDIMessageType messageType, int channel, int dataA, int dataB);
     
@@ -40,6 +44,8 @@ public:
     
     void dumpAllParameters();
     float getDSPValue(unsigned int index);
+    
+    vector<HIDElement>& getHIDDescription();
     
     vector<Parameter*> getAllParameters();
     Parameter* getLastChangedParameter();
@@ -57,6 +63,9 @@ protected:
 protected:
     DSPKernel* dspKernel;
     int midiChannel = -1;
+    
+    IPresetManager* presetManager = nullptr;
+    IDisplayManager* displayManager = nullptr;
     
     void (*valueChangedCallback)(uint8_t, float) = nullptr;
     

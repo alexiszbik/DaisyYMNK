@@ -17,13 +17,21 @@ struct HIDAdc {
         pos = (pos + 1) % N;
 
         float sum = 0.0f;
-        for (float v : buffer)
+        for (float v : buffer) {
             sum += v;
+        }
 
         float avg = sum / N;
 
-        if (fabs(avg - value) < deadband)
-            return false;
+        if (fabs(avg - value) < deadband) {
+            if (deadBandTimer < N*16) { //16 => best value I found
+                deadBandTimer++;
+            } else {
+                return false;
+            }
+        } else {
+            deadBandTimer = 0;
+        }
 
         if (value != avg) {
             value = avg;
@@ -36,10 +44,11 @@ struct HIDAdc {
     float value = 0;
 
 private:
-    static constexpr int N = 4;
-    float buffer[N] = {};
-    int pos = 0;
+    static constexpr uint8_t N = 4;
+    float buffer[N] = {}; //Do we really need a buff
+    uint8_t pos = 0;
 
     const float deadband = 0.001f; 
+    int deadBandTimer = 0;
 };
 

@@ -24,7 +24,7 @@ struct HIDAdc {
         float avg = sum / N;
 
         if (fabs(avg - value) < deadband) {
-            if (deadBandTimer < N*16) { //16 => best value I found
+            if (deadBandTimer < N*4) { //16 => best value I found for normal ADC, 4 for Mux ...
                 deadBandTimer++;
             } else {
                 return false;
@@ -48,7 +48,7 @@ private:
     float buffer[N] = {}; //Do we really need a buff
     uint8_t pos = 0;
 
-    const float deadband = 0.001f; 
+    const float deadband = 0.008f; 
     int deadBandTimer = 0;
 };
 

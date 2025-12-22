@@ -48,7 +48,6 @@ public:
     vector<HIDElement>& getHIDDescription();
     
     const std::vector<Parameter*>& getAllParameters() const noexcept;
-    Parameter* getLastChangedParameter();
     
 protected:
     void lockHID(unsigned int index);

@@ -20,9 +20,6 @@ DSPKernel::DSPKernel(vector<ParameterDesc> parameterDescriptors)
         Parameter* p = new Parameter(paramDesc);
         parameters.push_back(p);
     }
-    if (parameters.size()) {
-        lastChangedParameter = parameters.front();
-    }
 }
 
 DSPKernel::~DSPKernel() {
@@ -34,11 +31,9 @@ DSPKernel::~DSPKernel() {
 
 void DSPKernel::setParameterValue(int index, float value) {
     auto param = parameters.at(index);
-//TODO => should be done on HID side !
-    //if (fabs(param->getValue() - value) > 0.005) {
-        lastChangedParameter = param;
-    //}
 
+    lastChangedParameterIndex = index;
+    
     param->setValue(value);
     
     if (parameters.at(index)->useSmoothValue() == false) {
@@ -46,8 +41,8 @@ void DSPKernel::setParameterValue(int index, float value) {
     }
 }
 
-Parameter* DSPKernel::getLastChangedParameter() {
-    return lastChangedParameter;
+int DSPKernel::getLastChangedParameterIndex() {
+    return lastChangedParameterIndex;
 }
 /*
 void DSPKernel::loadPreset(Preset<const char*>* preset) {
@@ -63,7 +58,6 @@ void DSPKernel::loadPreset(Preset<const char*>* preset) {
     }
 }
 */
-
 void DSPKernel::loadPreset(const float* preset) {
     uint8_t k = getParameterCount();
     while(k--) {
@@ -131,6 +125,10 @@ void DSPKernel::updateParameters() {
 
 const std::vector<Parameter*>& DSPKernel::getAllParameters() const noexcept {
     return parameters;
+}
+
+Parameter* DSPKernel::getParameter(int index) {
+    return parameters[index];
 }
 
 }

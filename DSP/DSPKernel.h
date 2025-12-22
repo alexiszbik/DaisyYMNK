@@ -45,7 +45,9 @@ public:
     float getUIValue(int index);
     
     const std::vector<Parameter*>& getAllParameters() const noexcept;
-    Parameter* getLastChangedParameter();
+    Parameter* getParameter(int index);
+    
+    int getLastChangedParameterIndex();
     
     //void loadPreset(Preset<const char*>* preset);
     void loadPreset(const float* preset);
@@ -63,7 +65,7 @@ protected:
     
 private:
     vector<Parameter*> parameters;
-    Parameter* lastChangedParameter = nullptr;
+    int lastChangedParameterIndex = 0;
 };
 
 }

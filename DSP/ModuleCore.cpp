@@ -85,8 +85,4 @@ const std::vector<Parameter*>& ModuleCore::getAllParameters() const noexcept {
     return dspKernel->getAllParameters();
 }
 
-Parameter* ModuleCore::getLastChangedParameter() {
-    return dspKernel->getLastChangedParameter();
-}
-
 }

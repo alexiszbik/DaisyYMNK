@@ -35,9 +35,9 @@ DSPKernel::~DSPKernel() {
 void DSPKernel::setParameterValue(int index, float value) {
     auto param = parameters.at(index);
 //TODO => should be done on HID side !
-    if (fabs(param->getValue() - value) > 0.005) {
+    //if (fabs(param->getValue() - value) > 0.005) {
         lastChangedParameter = param;
-    }
+    //}
 
     param->setValue(value);
     

@@ -46,8 +46,8 @@ void HID::init(DaisySeed &hw) {
             if (hidElmt.type == kLed) {
                 leds.push_back(new HIDLed(hidElmt.index, pin));
             } else if (hidElmt.requireAdc()) {
-                adcConfig[adcIndexes.size() + (useMux ? 1 : 0)].InitSingle(pin);
-                adcIndexes.push_back(hidElmt.index);
+                adcConfig[adcs.size() + (useMux ? 1 : 0)].InitSingle(pin);
+                adcs.push_back(hidElmt.index);
             } else {
                 buttons.push_back(new HIDButton(hidElmt.index, pin));
             }
@@ -59,8 +59,11 @@ void HID::init(DaisySeed &hw) {
 }
 
 void HID::readMux(uint8_t channel, ModuleCore* core) {
-    muxValues[channel] = mux->Read(channel);
-    core->setHIDValue(muxIndexes[muxIdxRead], muxValues[muxIdxRead]);
+    bool valueChanged = false;
+    muxValues[channel] = mux->Read(channel, valueChanged);
+    if (valueChanged) {
+        core->setHIDValue(muxIndexes[muxIdxRead], muxValues[muxIdxRead]);
+    }
 }
 
 void HID::process(DaisySeed &hw, ModuleCore* core) {
@@ -72,9 +75,11 @@ void HID::process(DaisySeed &hw, ModuleCore* core) {
 
     int k = 0;
     int offset = useMux ? 1 : 0;
-    for (auto &adcIdx : adcIndexes) {
+    for (auto &adcElmt : adcs) {
         float value = hw.adc.GetFloat(k + offset);
-        core->setHIDValue(adcIdx, value);
+        if (adcElmt.setValue(value)) {
+            core->setHIDValue(adcElmt.index, adcElmt.value);
+        }
         k++;
     }
 

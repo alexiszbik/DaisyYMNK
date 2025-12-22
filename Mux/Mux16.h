@@ -1,6 +1,8 @@
 #pragma once
 #include "daisy_seed.h"
 
+#include "../Base/HIDAdc.h"
+
 using namespace daisy;
 
 class Mux16
@@ -13,7 +15,7 @@ public:
               Pin s2,
               Pin s3);
 
-    float Read(uint8_t channel);
+    float Read(uint8_t channel, bool& valueChanged);
   private:
     void Select(uint8_t ch);
 
@@ -22,5 +24,6 @@ public:
 
     dsy_gpio s0_, s1_, s2_, s3_;
 
-    float last_[16];
+    //float last_[16];
+    HIDAdc values[16];
 };

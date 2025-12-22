@@ -26,11 +26,6 @@ void Mux16::Init(AdcHandle* adc_handle,
     init_gpio(s1_, s1);
     init_gpio(s2_, s2);
     init_gpio(s3_, s3);
-
-    uint8_t k = 16;
-    while(k--) {
-        last_[k] = 0;
-    }
 }
 
 void Mux16::Select(uint8_t ch)
@@ -41,7 +36,7 @@ void Mux16::Select(uint8_t ch)
     dsy_gpio_write(&s3_, (ch >> 3) & 0x01);
 }
 
-float Mux16::Read(uint8_t channel)
+float Mux16::Read(uint8_t channel, bool& valueChanged)
 {
     if(channel > 15)
         return 0.0f;
@@ -51,9 +46,11 @@ float Mux16::Read(uint8_t channel)
 
     float v = adc_->GetFloat(adc_idx_);
 
+    valueChanged = values[channel].setValue(v);
+
     /*// Filtering ?
     last_[channel] += 0.15f * (v - last_[channel]);*/
 
-    return v;//last_[channel];
+    return values[channel].value;//last_[channel];
 }
 

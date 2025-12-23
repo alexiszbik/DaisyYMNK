@@ -47,6 +47,7 @@ private:
 
     bool needsUpdate = false;
     bool updatedLine[lineCount];
+    bool lineToUpdate[lineCount];
 
     char lines[lineCount][32] = {{0}};
 

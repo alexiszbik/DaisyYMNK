@@ -66,12 +66,18 @@ void DisplayManager::Update() {
             currentPixBlock = 0;
             if (needsUpdate) {
                 for (uint8_t l = 0; l < lineCount; l++) {
+                    lineToUpdate[l] = updatedLine[l];
+                }
+                
+                needsUpdate = false;
+
+                for (uint8_t l = 0; l < lineCount; l++) {
                     if (updatedLine[l]) {
                         currentLine = l;
                         pipe = ready;
                         break;
                     }
-                }
+                }   
             }
             
         }
@@ -92,7 +98,7 @@ void DisplayManager::Update() {
 
                 if (currentPixBlock >= 2*scr_w) {
                     currentPixBlock = 0;
-                    updatedLine[currentLine] = false;
+                    lineToUpdate[currentLine] = false;
 
                     do {
                         currentLine++;
@@ -100,7 +106,7 @@ void DisplayManager::Update() {
                             pipe = idle;
                             return;
                         }
-                    } while (!updatedLine[currentLine]);
+                    } while (!lineToUpdate[currentLine]);
                 }
             }
         }
@@ -129,5 +135,4 @@ void DisplayManager::Prepare()
             display.WriteString(lines[i], Font_7x10, true);
         }
     }
-    needsUpdate = false;
 }

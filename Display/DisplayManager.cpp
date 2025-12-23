@@ -5,10 +5,11 @@
 
 DisplayManager* DisplayManager::singleton = nullptr;
 
-DisplayManager* DisplayManager::GetInstance()
+DisplayManager* DisplayManager::GetInstance() //TODO : get rid of singleton ? this is maybe bad design
 {
-    if(!singleton)
+    if(!singleton) {
         singleton = new DisplayManager();
+    }
     return singleton;
 }
 
@@ -127,7 +128,7 @@ void DisplayManager::setLine(int idx, const char* str)
 void DisplayManager::Prepare()
 {
     display.Fill(false);
-    for(int i=0;i<lineCount;i++)
+    for(uint8_t i=0; i<lineCount; i++)
     {
         if(lines[i][0] != 0)
         {

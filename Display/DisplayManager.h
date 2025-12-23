@@ -10,9 +10,10 @@
 using namespace daisy;
 
 static constexpr uint8_t scr_w = 128;
+static constexpr uint8_t scr_h = 64;
 
 using OLEDDriver
-    = UpdatedDriver<scr_w, 64, MyTransport>;
+    = UpdatedDriver<scr_w, scr_h, MyTransport>;
 
 using Display_t = MyOledDisplay<OLEDDriver>;
 
@@ -47,7 +48,7 @@ private:
 
     bool needsUpdate = false;
     bool updatedLine[lineCount];
-    bool lineToUpdate[lineCount];
+    bool lineToUpdate[lineCount]; //Buffer to get everything in sync
 
     char lines[lineCount][32] = {{0}};
 

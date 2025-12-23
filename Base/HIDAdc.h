@@ -4,51 +4,38 @@
 
 using namespace daisy;
 
-//Smoothed part should be in a different class
-
-struct HIDAdc {
+struct HIDAdc
+{
     HIDAdc(unsigned int index) : index(index) {}
+    HIDAdc() {}
 
-    HIDAdc() {};
+    bool setValue(float input)
+    {
+        // EMA
+        float newValue = value + alpha * (input - value);
 
-    bool setValue(float input) {
-        
-        buffer[pos] = input;
-        pos = (pos + 1) % N;
-
-        float sum = 0.0f;
-        for (float v : buffer) {
-            sum += v;
-        }
-
-        float avg = sum / N;
-
-        if (fabs(avg - value) < deadband) {
-            if (deadBandTimer < N*4) { //16 => best value I found for normal ADC, 4 for Mux ...
+        if (fabs(newValue - value) < deadband)
+        {
+            if(deadBandTimer < deadbandHold)
                 deadBandTimer++;
-            } else {
+            else
                 return false;
-            }
-        } else {
+        }
+        else
+        {
             deadBandTimer = 0;
         }
 
-        if (value != avg) {
-            value = avg;
-            return true;
-        }
-        return false;
+        value = newValue;
+        return true;
     }
 
     unsigned int index = 0;
-    float value = 0;
+    float value = 0.f;
 
 private:
-    static constexpr uint8_t N = 4;
-    float buffer[N] = {}; //Do we really need a buff
-    uint8_t pos = 0;
-
-    const float deadband = 0.008f; 
+    const float alpha = 0.25f;      // ≈ N=4
+    const float deadband = 0.002f;
+    const int deadbandHold = 16;
     int deadBandTimer = 0;
 };
-

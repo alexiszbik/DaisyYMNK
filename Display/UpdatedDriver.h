@@ -1,5 +1,4 @@
-#ifndef UPDATED_DRIVER_H
-#define UPDATED_DRIVER_H
+#pragma once
 
 #include "daisy_seed.h"
 #include "dev/oled_ssd130x.h"
@@ -168,5 +167,3 @@ class UpdatedDriver
     Transport transport_;
     uint8_t   buffer_[width * height / 8];
 };
-
-#endif //UPDATED_DRIVER_H

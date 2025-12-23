@@ -7,6 +7,8 @@
 #define PRESET_SECTOR_SIZE 4096
 #define PRESET_MAGIC       0xDEADBEEF
 
+//Erasures will happen by 4K, 32K or 64K increments.
+
 using namespace daisy;
 
 class PresetManager : public IPresetManager

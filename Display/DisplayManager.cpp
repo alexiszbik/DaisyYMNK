@@ -66,15 +66,14 @@ void DisplayManager::Update() {
         {
             currentPixBlock = 0;
             if (needsUpdate) {
-                for (uint8_t l = 0; l < lineCount; l++) {
-                    lineToUpdate[l] = updatedLine[l];
-                }
+                memcpy(lineToUpdate, updatedLine, lineCount*sizeof(bool));
                 
                 needsUpdate = false;
 
                 for (uint8_t l = 0; l < lineCount; l++) {
                     if (updatedLine[l]) {
                         currentLine = l;
+                        currentLineOffset = currentLine*2*scr_w;
                         pipe = ready;
                         break;
                     }
@@ -93,7 +92,7 @@ void DisplayManager::Update() {
             uint8_t actionCount = 8;
             while(actionCount--) {
 
-                display.Update(currentLine*2*scr_w + currentPixBlock);
+                display.Update(currentLineOffset + currentPixBlock);
 
                 currentPixBlock++;
 
@@ -103,6 +102,7 @@ void DisplayManager::Update() {
 
                     do {
                         currentLine++;
+                        currentLineOffset = currentLine*2*scr_w;
                         if (currentLine >= lineCount) {
                             pipe = idle;
                             return;
@@ -116,13 +116,30 @@ void DisplayManager::Update() {
     
 }
 
-
+/*
 void DisplayManager::setLine(int idx, const char* str)
 {
     updatedLine[idx] = true;
     if(!str) { lines[idx][0] = 0; return; }
     strncpy(lines[idx], str, sizeof(lines[idx])-1);
     lines[idx][sizeof(lines[idx])-1] = 0;
+}
+*/
+void DisplayManager::setLine(int idx, const char* str)
+{
+    updatedLine[idx] = true;
+
+    if(!str)
+    {
+        lines[idx][0] = '\0';
+        return;
+    }
+
+    const size_t len = 32;
+    const size_t max = len - 1;
+    
+    memcpy(lines[idx], str, max);
+    lines[idx][max] = '\0';
 }
 
 void DisplayManager::Prepare()

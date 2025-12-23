@@ -57,5 +57,6 @@ private:
 
     int currentPixBlock = 0;
     int currentLine = 0;
+    int currentLineOffset = 0;
     EPipe pipe = idle;
 };

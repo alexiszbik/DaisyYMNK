@@ -37,7 +37,7 @@ void DSPKernel::setParameterValue(int index, float value) {
     param->setValue(value);
     
     if (parameters.at(index)->useSmoothValue() == false) {
-        updateParameter(index, parameters.at(index)->getValue());
+        updateParameter(index, value);
     }
 }
 

@@ -34,7 +34,7 @@ struct HIDAdc
     float value = 0.f;
 
 private:
-    const float alpha = 0.5f;  
+    const float alpha = 0.95f;  
     const float deadband = 0.002f;
     const int deadbandHold = 8;
     int deadBandTimer = 0;

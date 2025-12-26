@@ -28,8 +28,13 @@ inline int valueMap(float value, int min, int max) {
     return round(value * range + min);
 }
 
-inline float clamp(float value, float min, float max) {
+inline float clamp(float value, float min, float max) noexcept {
     return fmaxf(fminf(value, max), min);
+}
+
+inline float clamp01(float x) noexcept
+{
+    return fminf(fmaxf(x, 0.f), 1.f);
 }
 
 }

@@ -13,3 +13,5 @@
 #include "SmoothValue.h"
 
 #include "Env/AttackDecay.h"
+
+#include "Filters/BiquadFilter.h"

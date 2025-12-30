@@ -23,6 +23,16 @@ inline float valueMap(float value, float min, float max) {
     return value * range + min;
 }
 
+inline float valueMapPow2(float value, float min, float max) {
+    float range = (max - min);
+    return value * value * range + min;
+}
+
+inline float valueMapPow3(float value, float min, float max) {
+    float range = (max - min);
+    return value * value * value * range + min;
+}
+
 inline int valueMap(float value, int min, int max) {
     int range = (max - min);
     return round(value * range + min);

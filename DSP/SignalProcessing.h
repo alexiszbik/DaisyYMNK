@@ -10,8 +10,17 @@
 
 #pragma once
 #include <math.h>
+#include <daisysp.h>
 
 namespace ydaisy {
+
+inline float sqrtDryWet(float inA, float inB, float value) {
+    float a = value;
+    float b = 1.f - value;
+    a = sqrtf(a);
+    b = sqrtf(b);
+    return a * inA + b * inB;
+}
 
 inline float dryWet(float inA, float inB, float value) {
     value = value*value;

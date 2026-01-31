@@ -15,3 +15,4 @@
 #include "Env/AttackDecay.h"
 
 #include "Filters/BiquadFilter.h"
+#include "Filters/FastOnePole.h"

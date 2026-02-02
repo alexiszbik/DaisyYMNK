@@ -49,7 +49,7 @@ void HID::init(DaisySeed &hw) {
                 adcConfig[adcs.size() + (useMux ? 1 : 0)].InitSingle(pin);
                 adcs.push_back(hidElmt.index);
             } else {
-                buttons.push_back(new HIDButton(hidElmt.index, pin));
+                buttons.push_back(new HIDButton(hidElmt.index, pin, hidElmt.type == kButton));
             }
         }
     }
@@ -86,10 +86,15 @@ void HID::process(DaisySeed &hw, ModuleCore* core) {
     for (auto button : buttons) {
         button->sw->Debounce();
         bool state = button->sw->Pressed();
-        if (state != button->previousState && state) { 
-            //maybe it would be better to pass 1 && 0
-            //in case of continuous push button
-            core->setHIDValue(button->index, 1);
+        if (state != button->previousState) { 
+            if (button->isToggle) {
+                if (state) {
+                    core->setHIDValue(button->index, 1);
+                }
+            } else {
+                core->setHIDValue(button->index, state ? 1 : 0);
+            }
+            
         }
         button->previousState = state;
     }

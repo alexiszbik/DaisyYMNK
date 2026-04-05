@@ -70,9 +70,15 @@ inline void floatToCString2(float v, char* buf)
 }
 
 // buffer minimum 4 chars -> "-99\0"
-inline void intToCString2(int v, char* buf)
+inline void intToCString2(int v, char* buf, const char* prefix = nullptr)
 {
     char* p = buf;
+    
+    if (prefix != nullptr) {
+        while(*prefix)
+            *p++ = *prefix++;
+    }
+
 
     // handle sign
     if(v < 0)

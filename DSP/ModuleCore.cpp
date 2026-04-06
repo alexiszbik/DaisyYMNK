@@ -59,7 +59,9 @@ void ModuleCore::dumpAllParameters() {
 void ModuleCore::setHIDValue(unsigned int index, float value) {
     if (index < hidState.size()) {
         HIDState* state = &hidState.at(index);
-        if (state->isLock && fabs(state->value - value) > 0.05) {
+        bool unlockCondition = fabs(state->value - value) > 0.05;
+        
+        if (state->isLock && unlockCondition) {
             state->isLock = false;
         }
         if (!state->isLock) {

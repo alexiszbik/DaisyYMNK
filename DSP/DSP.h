@@ -13,6 +13,8 @@
 #include "SmoothValue.h"
 
 #include "Env/AttackDecay.h"
+#include "Env/SynthEnv.h"
 
 #include "Filters/BiquadFilter.h"
 #include "Filters/FastOnePole.h"
+#include "Filters/OnePoleSmoother.h"

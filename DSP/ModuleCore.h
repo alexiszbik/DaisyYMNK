@@ -38,7 +38,7 @@ public:
     
     virtual void processMIDI(MIDIMessageType messageType, int channel, int dataA, int dataB);
     
-    void setHIDValue(unsigned int index, float value);
+    virtual void setHIDValue(unsigned int index, float value);
     float getHIDValue(unsigned int index);
     void setDSPValue(unsigned int index, float value);
     
@@ -51,6 +51,7 @@ public:
     
 protected:
     void lockHID(unsigned int index);
+    virtual bool unlockCondition(unsigned int index, float value, HIDState* hidState);
     
 protected:
     //This is the method to override to transmit things to the DSP
@@ -62,10 +63,11 @@ protected:
     
     IPresetManager* presetManager = nullptr;
     IDisplayManager* displayManager = nullptr;
+
+    vector<HIDState> hidState;
     
 private:
     vector<HIDElement> hidDesc;
-    vector<HIDState> hidState;
     
 #if !defined _SIMULATOR_
    

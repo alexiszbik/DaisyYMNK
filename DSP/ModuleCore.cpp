@@ -56,13 +56,18 @@ void ModuleCore::dumpAllParameters() {
     dspKernel->dumpParameters();
 }
 
+bool ModuleCore::unlockCondition(unsigned int index, float value, HIDState* hidState) {
+    return fabs(hidState->value - value) > 0.05;
+}
+
 void ModuleCore::setHIDValue(unsigned int index, float value) {
     if (index < hidState.size()) {
         HIDState* state = &hidState.at(index);
-        bool unlockCondition = fabs(state->value - value) > 0.05;
         
-        if (state->isLock && unlockCondition) {
-            state->isLock = false;
+        if (state->isLock) {
+            if (unlockCondition(index, value, state)) {
+                state->isLock = false;
+            }
         }
         if (!state->isLock) {
             state->value = value;

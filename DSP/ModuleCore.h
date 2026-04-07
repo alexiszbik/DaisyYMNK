@@ -19,8 +19,17 @@
 namespace ydaisy {
 
 struct HIDState {
-    float value = 0;
+    float value = 0; //lockedValue
+    float lastValue = 0;
     bool isLock = false;
+    // Preset value X (0..1) when locked after load; used for soft takeover.
+    float lockPresetValue = 0.f;
+    // Physical knob at lock K (0..1); -1 = capture on first HID sample after lock.
+    float lockKnobPos = -1.f;
+
+    void lock() {
+        isLock = true;
+    }
 };
 
 class ModuleCore {
@@ -52,6 +61,10 @@ public:
 protected:
     void lockHID(unsigned int index);
     virtual bool unlockCondition(unsigned int index, float value, HIDState* hidState);
+    /// If true while locked, writes *outMapped to the DSP instead of raw hardware (soft takeover).
+    virtual bool trySoftTakeover(unsigned int index, float hwValue, HIDState* state, float* outMapped);
+    static float softTakeoverMap(float k, float K, float X) noexcept;
+    static bool physicalKnobCrossedPreset(float prev, float curr, float X) noexcept;
     
 protected:
     //This is the method to override to transmit things to the DSP

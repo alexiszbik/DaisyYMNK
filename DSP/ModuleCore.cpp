@@ -10,6 +10,7 @@
 
 #include "ModuleCore.h"
 #include <cmath>
+#include "daisysp.h"
 
 namespace ydaisy {
 
@@ -44,7 +45,7 @@ void ModuleCore::processMIDI(MIDIMessageType messageType, int channel, int dataA
 
 void ModuleCore::lockHID(unsigned int index) {
     if (index < hidState.size()) {
-        hidState.at(index).isLock = true;
+        hidState.at(index).lock();
     }
 }
 
@@ -60,19 +61,88 @@ bool ModuleCore::unlockCondition(unsigned int index, float value, HIDState* hidS
     return fabs(hidState->value - value) > 0.05;
 }
 
+float ModuleCore::softTakeoverMap(float k, float K, float X) noexcept {
+    constexpr float eps = 1e-5f;
+    k = daisysp::fclamp(k, 0.f, 1.f);
+    K = daisysp::fclamp(K, 0.f, 1.f);
+    X = daisysp::fclamp(X, 0.f, 1.f);
+
+    if (k <= K + eps) {
+        if (K <= eps) {
+            return k;
+        }
+        return (k / K) * X;
+    }
+    if (K >= 1.f - eps) {
+        return X + (k - K);
+    }
+    return X + (k - K) / (1.f - K) * (1.f - X);
+}
+
+bool ModuleCore::physicalKnobCrossedPreset(float prev, float curr, float X) noexcept {
+    constexpr float eps = 1e-4f;
+    curr = daisysp::fclamp(curr, 0.f, 1.f);
+    prev = daisysp::fclamp(prev, 0.f, 1.f);
+    X    = daisysp::fclamp(X,    0.f, 1.f);
+    if (std::fabs(curr - X) <= eps || std::fabs(prev - X) <= eps) {
+        return true;
+    }
+    return (prev - X) * (curr - X) < 0.f;
+}
+
+bool ModuleCore::trySoftTakeover(unsigned int index, float hwValue, HIDState* state, float* outMapped) {
+    if (!state->isLock) {
+        return false;
+    }
+    if (index >= hidDesc.size()) {
+        return false;
+    }
+    const HIDElement& element = hidDesc.at(index);
+    if (element.type != kKnob) {
+        return false;
+    }
+    const float X = state->lockPresetValue;
+    float prev = state->lastValue;
+    if (prev < 0.f) {
+        prev = hwValue;
+    }
+    if (state->lockKnobPos < 0.f) {
+        state->lockKnobPos = hwValue;
+    }
+    constexpr float kEdgeUnlockEps = 1e-3f;
+    if (hwValue <= kEdgeUnlockEps || hwValue >= 1.f - kEdgeUnlockEps) {
+        state->isLock = false;
+        return false;
+    }
+    if (physicalKnobCrossedPreset(prev, hwValue, X)) {
+        // Keep continuity at unlock point: output the preset value once,
+        // then switch to raw hardware value on next call.
+        *outMapped = X;
+        state->isLock = false;
+        return true;
+    }
+    *outMapped = softTakeoverMap(hwValue, state->lockKnobPos, X);
+    return true;
+}
+
 void ModuleCore::setHIDValue(unsigned int index, float value) {
     if (index < hidState.size()) {
         HIDState* state = &hidState.at(index);
         
         if (state->isLock) {
-            if (unlockCondition(index, value, state)) {
-                state->isLock = false;
+            float mapped = value;
+            if (trySoftTakeover(index, value, state, &mapped)) {
+                state->value = value;
+                updateHIDValue(index, mapped);
+                state->lastValue = value;
+                return;
             }
-        }
-        if (!state->isLock) {
+        } else {
             state->value = value;
             updateHIDValue(index, value);
         }
+        
+        state->lastValue = value;
     }
 }
 

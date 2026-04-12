@@ -101,6 +101,6 @@ void HID::process(DaisySeed &hw, ModuleCore* core) {
 
     for (auto led : leds) {
         bool state = core->getHIDValue(led->index) > 0.f;
-        dsy_gpio_write(led->led, state);
+        led->gpio.Write(state);
     }
 }

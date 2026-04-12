@@ -22,7 +22,7 @@ public:
     AdcHandle* adc_;
     uint16_t   adc_idx_;
 
-    dsy_gpio s0_, s1_, s2_, s3_;
+    GPIO s0_, s1_, s2_, s3_;
 
     //float last_[16];
     HIDAdc values[16];

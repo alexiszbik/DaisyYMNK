@@ -163,6 +163,8 @@ class UpdatedDriver
         }
     };
 
+    bool UpdateFinished() { return true; }
+
   private:
     Transport transport_;
     uint8_t   buffer_[width * height / 8];

@@ -42,4 +42,10 @@ private:
 
     AdcHandle adcHandle;
 
+    //I figured out that value doesn't sometimes go until 3.3V
+    //But stays at 3.2V at maximum
+    //This gives a little bump to the pot values
+    const float adcValueBump = 1.05; 
+    
+
 };

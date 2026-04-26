@@ -62,9 +62,10 @@ void HID::readMux(uint8_t channel, ModuleCore* core) {
     bool valueChanged = false;
     muxValues[channel] = mux->Read(channel, valueChanged);
     if (valueChanged) {
-        core->setHIDValue(muxIndexes[muxIdxRead], muxValues[muxIdxRead]);
+        core->setHIDValue(muxIndexes[muxIdxRead], muxValues[muxIdxRead] * adcValueBump);
     }
 }
+
 
 void HID::process(DaisySeed &hw, ModuleCore* core) {
 
@@ -78,7 +79,7 @@ void HID::process(DaisySeed &hw, ModuleCore* core) {
     for (auto &adcElmt : adcs) {
         float value = hw.adc.GetFloat(k + offset);
         if (adcElmt.setValue(value)) {
-            core->setHIDValue(adcElmt.index, adcElmt.value);
+            core->setHIDValue(adcElmt.index, adcElmt.value * adcValueBump);
         }
         k++;
     }

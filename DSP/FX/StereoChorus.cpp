@@ -28,7 +28,7 @@ float StereoChorus::Process(float in, int channel)
     float wet = del_[channel].Read();
     del_[channel].Write(in + wet * feedback_);
 
-    return (in + wet) * 0.707f;
+    return (in + wet) * 0.5957f; //-4.5db
 }
 
 void StereoChorus::SetFeedback(float feedback)

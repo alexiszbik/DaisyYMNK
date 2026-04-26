@@ -20,7 +20,7 @@ public:
 
     ~DaisyBase();
 
-    void init(AudioHandle::AudioCallback cb);
+    void init(AudioHandle::AudioCallback cb, int blockSize);
     void setDisplayManager(IDisplayManager* inDisplayManager);
     void setPresetManager(IPresetManager* inPresetManager);
     

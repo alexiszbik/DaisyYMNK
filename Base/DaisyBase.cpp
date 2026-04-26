@@ -62,20 +62,20 @@ void DaisyBase::handleMidiMessage(MidiEvent m)
     }
 }
 
-void DaisyBase::init(AudioHandle::AudioCallback cb) {
+void DaisyBase::init(AudioHandle::AudioCallback cb, int blockSize) {
 
     hw->Configure();
     hw->Init();
     hw->SetLed(true);
 
-	hw->SetAudioBlockSize(128); // number of samples handled per callback
+	hw->SetAudioBlockSize(blockSize); // number of samples handled per callback
 	hw->SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
 
 	core->init(2, hw->AudioSampleRate());
 
     hid->init(*hw);
 #if TEST_MODE
-    testOsc.Init(hw.AudioSampleRate());
+    testOsc.Init(hw->AudioSampleRate());
     testOsc.SetFreq(440);
 #endif
 

@@ -25,15 +25,14 @@ void SmoothValue::setImmediate(float value) {
 void SmoothValue::setValue(float value) {
     if (this->value != value) {
         this->value = value;
-        changeCounter = changeCounter + 1;
+        valueChanged = true;
     }
 }
 
 void SmoothValue::dezipperCheck(long rampDuration)
 {
-    long changeCounterSnapshot = changeCounter;
-    if (updateCounter != changeCounterSnapshot) {
-        updateCounter = changeCounterSnapshot;
+    if (valueChanged) {
+        valueChanged = false;
         startRamp(value, rampDuration);
     }
 }

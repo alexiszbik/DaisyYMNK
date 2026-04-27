@@ -38,8 +38,8 @@ private:
     float goal = 0.0f;
     float inverseSlope = 0.0f;
     long samplesRemaining = 0;
-    long changeCounter = 0;
-    long updateCounter = 0;
+    
+    bool valueChanged = true;
 };
 
 }

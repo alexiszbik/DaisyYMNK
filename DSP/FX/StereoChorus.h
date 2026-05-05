@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include "Utility/delayline.h"
 
+#include "DSP/Filters/FastOnePole.h"
+
 class StereoChorus
 {
 public:
@@ -33,4 +35,6 @@ private:
     daisysp::DelayLine<float, kDelayLength> del_[2];
 
     float ProcessLfo(int channel);
+
+    FastOnePole hpFilter;
 };

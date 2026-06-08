@@ -56,13 +56,13 @@ float ModuleCore::getDSPValue(unsigned int index) {
 void ModuleCore::dumpAllParameters() {
     dspKernel->dumpParameters();
 }
-
+/*
 bool ModuleCore::unlockCondition(unsigned int index, float value, HIDState* hidState) {
     return fabs(hidState->value - value) > 0.05;
 }
-
+*/
 float ModuleCore::softTakeoverMap(float k, float K, float X) noexcept {
-    constexpr float eps = 1e-5f;
+    constexpr float eps = 1e-2f;//1e-5f;
     k = daisysp::fclamp(k, 0.f, 1.f);
     K = daisysp::fclamp(K, 0.f, 1.f);
     X = daisysp::fclamp(X, 0.f, 1.f);
@@ -80,7 +80,7 @@ float ModuleCore::softTakeoverMap(float k, float K, float X) noexcept {
 }
 
 bool ModuleCore::physicalKnobCrossedPreset(float prev, float curr, float X) noexcept {
-    constexpr float eps = 1e-4f;
+    constexpr float eps = 1e-2f;//1e-4f;
     curr = daisysp::fclamp(curr, 0.f, 1.f);
     prev = daisysp::fclamp(prev, 0.f, 1.f);
     X    = daisysp::fclamp(X,    0.f, 1.f);
@@ -109,7 +109,7 @@ bool ModuleCore::trySoftTakeover(unsigned int index, float hwValue, HIDState* st
     if (state->lockKnobPos < 0.f) {
         state->lockKnobPos = hwValue;
     }
-    constexpr float kEdgeUnlockEps = 1e-3f;
+    constexpr float kEdgeUnlockEps = 1e-2f;
     if (hwValue <= kEdgeUnlockEps || hwValue >= 1.f - kEdgeUnlockEps) {
         state->isLock = false;
         return false;

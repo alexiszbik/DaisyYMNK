@@ -60,8 +60,8 @@ public:
     
 protected:
     void lockHID(unsigned int index);
-    virtual bool unlockCondition(unsigned int index, float value, HIDState* hidState);
-    /// If true while locked, writes *outMapped to the DSP instead of raw hardware (soft takeover).
+    //virtual bool unlockCondition(unsigned int index, float value, HIDState* hidState);
+    // If true while locked, writes *outMapped to the DSP instead of raw hardware (soft takeover).
     virtual bool trySoftTakeover(unsigned int index, float hwValue, HIDState* state, float* outMapped);
     static float softTakeoverMap(float k, float K, float X) noexcept;
     static bool physicalKnobCrossedPreset(float prev, float curr, float X) noexcept;

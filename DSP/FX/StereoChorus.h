@@ -36,5 +36,5 @@ private:
 
     float ProcessLfo(int channel);
 
-    FastOnePole hpFilter;
+    FastOnePole hpFilter[2];
 };

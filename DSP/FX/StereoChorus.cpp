@@ -7,13 +7,15 @@ using namespace daisysp;
 void StereoChorus::Init(float sampleRate)
 {
     sampleRate_ = sampleRate;
-    hpFilter.Init(sampleRate);
-    hpFilter.SetHighpass(200);
+    
 
     for (int i = 0; i < 2; i++) {
         del_[i].Init();
         lfoPhase_[i] = 0.f;
         lfoFreq_[i]  = 0.f;
+
+        hpFilter[i].Init(sampleRate);
+        hpFilter[i].SetHighpass(150);
     }
 
     feedback_ = 0.2f;
@@ -27,10 +29,8 @@ float StereoChorus::Process(float in, int channel)
     float lfo = ProcessLfo(channel);
     del_[channel].SetDelay(lfo + delay_);
 
-    float filteredIn = hpFilter.Process(in);
-
     float wet = del_[channel].Read();
-    del_[channel].Write(filteredIn + wet * feedback_);
+    del_[channel].Write(in + hpFilter[channel].Process(wet * feedback_));
 
     return (in + wet) * 0.5957f; //-4.5db
 }

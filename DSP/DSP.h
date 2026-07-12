@@ -18,3 +18,5 @@
 #include "Filters/BiquadFilter.h"
 #include "Filters/FastOnePole.h"
 #include "Filters/OnePoleSmoother.h"
+
+#include "Analysis/InputMeter.h"

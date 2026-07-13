@@ -8,9 +8,21 @@ void MuteController::init(float sampleRate) {
     muted = false;
 }
 
+void MuteController::setMuted(bool value) {
+    if (muted == value) {
+        return;
+    }
+
+    muted = value;
+
+    if (delegate) {
+        delegate->muteChanged(muted);
+    }
+}
+
 bool MuteController::processMIDI(MIDIMessageType type, int dataA, int dataB) {
     if (type == kControlChange && dataA == kMuteCC) {
-        muted = dataB > kMuteThreshold;
+        setMuted(dataB > kMuteThreshold);
         return true;
     }
     return false;

@@ -91,6 +91,10 @@ void DSPKernel::dumpParameters() {
 #endif
 }
 
+void DSPKernel::setMuteDelegate(MuteControllerDelegate* delegate) {
+    muteController.delegate = delegate;
+}
+
 void DSPKernel::init(int channelCount, double sampleRate) {
     this->channelCount = channelCount;
     this->sampleRate = sampleRate;

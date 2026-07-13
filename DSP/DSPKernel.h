@@ -55,10 +55,11 @@ public:
     
     void dumpParameters();
 
+    void setMuteDelegate(MuteControllerDelegate* delegate);
+
 protected:
     void applyMute(float** buf, int frameCount);
-    
-protected:
+
     int getParameterCount();
     float getValue(int index);
     void updateParameters();

@@ -5,11 +5,19 @@
 
 namespace ydaisy {
 
+class MuteControllerDelegate {
+public:
+    virtual ~MuteControllerDelegate() = default;
+    virtual void muteChanged(bool muted) = 0;
+};
+
 class MuteController {
 public:
     static constexpr int kMuteCC = 80;
     static constexpr int kMuteThreshold = 60;
     static constexpr float kFadeTimeSec = 0.005f;
+
+    MuteControllerDelegate* delegate = nullptr;
 
     void init(float sampleRate);
     bool processMIDI(MIDIMessageType type, int dataA, int dataB);
@@ -18,6 +26,8 @@ public:
     bool isMuted() const { return muted; }
 
 private:
+    void setMuted(bool value);
+
     SmoothValue gain;
     bool muted = false;
     long rampDuration = 0;

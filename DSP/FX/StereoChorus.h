@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "Utility/delayline.h"
 
-#include "DSP/Filters/FastOnePole.h"
+#include "Filters/FastOnePole.h"
 
 class StereoChorus
 {

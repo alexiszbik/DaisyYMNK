@@ -14,9 +14,9 @@ public:
         b = 1.f - x;
     }
 
-    float Process(float in)
+    float Process(float inData)
     {
-        z = a * z + b * in;
+        z = a * z + b * inData;
         return z;
     }
 

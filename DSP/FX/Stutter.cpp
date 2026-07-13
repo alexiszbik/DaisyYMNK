@@ -5,7 +5,7 @@
 void Stutter::Init(int inChannelCount, float sampleRate) {
     channelCount = std::min(inChannelCount, kMaxChannels);
     depthRampDuration = static_cast<long>(sampleRate * kDepthRampSec);
-    gateSmoother.setImmediate(0.f);
+    gateSmoother.setImmediate(1.f);
     depthSmoother.setImmediate(0.f);
     depth = 0.f;
 }
@@ -15,7 +15,7 @@ void Stutter::SetDepth(float inDepth) {
 }
 
 void Stutter::SetGate(bool open) {
-    gateSmoother.setValue(open ? 1.f : 0.f);
+    gateSmoother.setValue(open ? 0.f : 1.f);
 }
 
 void Stutter::Process(float** buf, int frameCount) {

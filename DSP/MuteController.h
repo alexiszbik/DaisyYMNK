@@ -24,11 +24,10 @@ public:
     void process(float** buf, int channelCount, int frameCount);
 
     bool isMuted() const { return muted; }
+    void setMuted(bool value);
     void unmute() { setMuted(false); }
 
 private:
-    void setMuted(bool value);
-
     SmoothValue gain;
     bool muted = false;
     long rampDuration = 0;

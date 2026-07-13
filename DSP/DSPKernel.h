@@ -58,6 +58,7 @@ public:
     void setMuteDelegate(MuteControllerDelegate* delegate);
 
     void unmute();
+    void setMuted(bool muted);
     bool isMuted() const;
 
 protected:

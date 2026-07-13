@@ -99,6 +99,10 @@ void DSPKernel::unmute() {
     muteController.unmute();
 }
 
+void DSPKernel::setMuted(bool muted) {
+    muteController.setMuted(muted);
+}
+
 bool DSPKernel::isMuted() const {
     return muteController.isMuted();
 }

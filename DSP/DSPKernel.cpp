@@ -95,6 +95,14 @@ void DSPKernel::setMuteDelegate(MuteControllerDelegate* delegate) {
     muteController.delegate = delegate;
 }
 
+void DSPKernel::unmute() {
+    muteController.unmute();
+}
+
+bool DSPKernel::isMuted() const {
+    return muteController.isMuted();
+}
+
 void DSPKernel::init(int channelCount, double sampleRate) {
     this->channelCount = channelCount;
     this->sampleRate = sampleRate;

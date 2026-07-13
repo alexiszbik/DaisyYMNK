@@ -24,6 +24,7 @@ public:
     void process(float** buf, int channelCount, int frameCount);
 
     bool isMuted() const { return muted; }
+    void unmute() { setMuted(false); }
 
 private:
     void setMuted(bool value);

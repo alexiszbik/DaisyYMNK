@@ -58,6 +58,24 @@ void DaisyBase::handleMidiMessage(MidiEvent m)
         }
         break;
 
+        case SystemRealTime:
+        {
+            switch (m.srt_type) {
+                case TimingClock:
+                    core->processMIDI(MIDIMessageType::kTimingClock, 0, 0, 0);
+                    break;
+                case Start:
+                    core->processMIDI(MIDIMessageType::kMidiStart, 0, 0, 0);
+                    break;
+                case Stop:
+                    core->processMIDI(MIDIMessageType::kMidiStop, 0, 0, 0);
+                    break;
+                default:
+                    break;
+            }
+        }
+        break;
+
         default: break;
     }
 }

@@ -57,6 +57,9 @@ public:
 
     void setMuteDelegate(MuteControllerDelegate* delegate);
 
+    void unmute();
+    bool isMuted() const;
+
 protected:
     void applyMute(float** buf, int frameCount);
 

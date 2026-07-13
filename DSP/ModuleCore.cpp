@@ -38,7 +38,11 @@ void ModuleCore::process(float** buf, int frameCount) {
 }
 
 void ModuleCore::processMIDI(MIDIMessageType messageType, int channel, int dataA, int dataB) {
-    if (midiChannel == -1 || midiChannel == channel) {
+    const bool isSystemRealTime = messageType == kTimingClock
+        || messageType == kMidiStart
+        || messageType == kMidiStop;
+
+    if (isSystemRealTime || midiChannel == -1 || midiChannel == channel) {
         dspKernel->processMIDI(messageType, channel, dataA, dataB);
     }
 }

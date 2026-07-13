@@ -18,7 +18,10 @@ enum MIDIMessageType {
     kControlChange,
     kPitchBend,
     kProgramChange,
-    
+    kTimingClock,
+    kMidiStart,
+    kMidiStop,
+
     kCount
 };
 

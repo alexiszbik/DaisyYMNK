@@ -11,6 +11,7 @@
 #include "Preset.h"
 #include "SignalProcessing.h"
 #include "SmoothValue.h"
+#include "MuteController.h"
 
 #include "Env/AttackDecay.h"
 #include "Env/SynthEnv.h"
@@ -20,3 +21,4 @@
 #include "Filters/OnePoleSmoother.h"
 
 #include "Analysis/InputMeter.h"
+

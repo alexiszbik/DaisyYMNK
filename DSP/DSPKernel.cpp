@@ -94,6 +94,7 @@ void DSPKernel::dumpParameters() {
 void DSPKernel::init(int channelCount, double sampleRate) {
     this->channelCount = channelCount;
     this->sampleRate = sampleRate;
+    muteController.init(static_cast<float>(sampleRate));
 }
 
 void DSPKernel::process(float** buf, int frameCount) {
@@ -102,8 +103,11 @@ void DSPKernel::process(float** buf, int frameCount) {
 void DSPKernel::processMIDI(MIDIMessageType messageType, int channel, int dataA, int dataB) {
     switch (messageType) {
         case MIDIMessageType::kControlChange : {
+            if (muteController.processMIDI(messageType, dataA, dataB)) {
+                break;
+            }
             int parameterIdx = dataA - MIDI_CTRL_START;
-            if (parameterIdx >= 0 && parameterIdx < parameters.size()) {
+            if (parameterIdx >= 0 && parameterIdx < static_cast<int>(parameters.size())) {
                 setParameterValue(parameterIdx, ((float)dataB)/127.f);
             }
         }
@@ -112,6 +116,10 @@ void DSPKernel::processMIDI(MIDIMessageType messageType, int channel, int dataA,
         default:
             break;
     }
+}
+
+void DSPKernel::applyMute(float** buf, int frameCount) {
+    muteController.process(buf, channelCount, frameCount);
 }
 
 void DSPKernel::updateParameter(int parameterIndex, float value) {

@@ -12,6 +12,7 @@
 
 #include <vector>
 #include "MidiMessageType.h"
+#include "MuteController.h"
 #include "Parameter.h"
 #include "Preset.h"
 
@@ -53,6 +54,9 @@ public:
     void loadPreset(const float* preset);
     
     void dumpParameters();
+
+protected:
+    void applyMute(float** buf, int frameCount);
     
 protected:
     int getParameterCount();
@@ -66,6 +70,7 @@ protected:
 private:
     vector<Parameter*> parameters;
     int lastChangedParameterIndex = 0;
+    MuteController muteController;
 };
 
 }

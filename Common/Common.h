@@ -3,3 +3,4 @@
 
 #include "InlineMath.h"
 #include "Note.h"
+#include "Memory.h"

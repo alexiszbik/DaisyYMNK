@@ -10,6 +10,7 @@
 #ifndef Buffer_h
 #define Buffer_h
 
+#include "Memory.h"
 #include "InlineMath.h"
 
 class Buffer {

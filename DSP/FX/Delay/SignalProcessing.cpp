@@ -10,41 +10,7 @@
 #include "SignalProcessing.h"
 #include <cmath>
 #include <cstring>
-#include "ConstValues.h"
 #include "InlineMath.h"
-
-class CppBiquadState : public BiquadState {
-public:
-    CppBiquadState() {
-        SignalProcessing::clear(inBuf, MAX_BUFFER_SIZE+2);
-        SignalProcessing::clear(outBuf, MAX_BUFFER_SIZE+2);
-    }
-
-    virtual ~CppBiquadState() {}
-    
-public:
-    virtual void clear() override {
-        SignalProcessing::clear(inBuf, 2);
-        SignalProcessing::clear(outBuf, 2);
-    };
-
-    virtual void clearBadStateValue() override {
-        inBuf[0] = convertBadValuesToZero(inBuf[0]);
-        inBuf[1] = convertBadValuesToZero(inBuf[1]);
-        outBuf[0] = convertBadValuesToZero(outBuf[0]);
-        outBuf[1] = convertBadValuesToZero(outBuf[1]);
-    };
-    
-public:
-    float inBuf[MAX_BUFFER_SIZE+2];
-    float outBuf[MAX_BUFFER_SIZE+2];
-
-};
-
-void SignalProcessing::init() {
-    srand(time(NULL));
-}
-
 
 
 //Addition : z = x + y
@@ -289,30 +255,4 @@ void SignalProcessing::threshold(float *array, float threshold, float *arrayOut,
             arrayOut[i] = 0;
         }
     }
-}
-
-void SignalProcessing::biquad(float* inData, float* coefficients, float *outData, const size_t frameCount, BiquadState* biquadState) {
-    
-    //TODO : I do this blindly! Please test it!
-    
-    CppBiquadState* state = (CppBiquadState*)biquadState;
-    
-    memcpy(state->inBuf + 2, inData, frameCount * sizeof(float));
-    
-    for (size_t i = 2; i < frameCount + 2; i++) {
-        state->outBuf[i] = (state->inBuf[i] * coefficients[0] + state->inBuf[i - 1] * coefficients[1] + state->inBuf[i - 2] * coefficients[2]) - (state->outBuf[i - 1] * coefficients[3] + state->outBuf[i - 2] * coefficients[4]) ;
-    }
-    
-    memcpy(outData, state->outBuf + 2, frameCount * sizeof(float));
-    
-    memcpy(state->inBuf, state->inBuf + frameCount, 2 * sizeof(float));
-    memcpy(state->outBuf, state->outBuf + frameCount, 2 * sizeof(float));
-}
-
-BiquadState* SignalProcessing::biquad_createState()  {
-    return new CppBiquadState();
-}
-
-void SignalProcessing::biquad_destroyState(BiquadState* biquadState) {
-    delete (CppBiquadState*)biquadState;
 }

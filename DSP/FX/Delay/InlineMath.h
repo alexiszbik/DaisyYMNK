@@ -13,7 +13,6 @@
 
 #include "math.h"
 #include <limits>
-#include "ConstValues.h"
 #include "SignalProcessing.h"
 
 #define LOG2  0.693147180559945
@@ -27,29 +26,6 @@
 #endif
 
 static const float twopi = 2.f * PI;
-
-static inline void allocBuf(float** buf, size_t size) {
-    *buf = (float*)malloc(sizeof(float)*size);
-    SignalProcessing::clear(*buf, size);
-}
-
-static inline void allocBuf_d(double** buf, size_t size) {
-    *buf = (double*)malloc(sizeof(double)*size);
-    SignalProcessing::clear(*buf, size);
-}
-
-static inline void allocBuf(float** buf) {
-    allocBuf(buf, MAX_BUFFER_SIZE);
-}
-
-static inline void allocBuf_d(double** buf) {
-    allocBuf_d(buf, MAX_BUFFER_SIZE);
-}
-
-static inline void initBuf(float** buf, const float initValue = 0.0f) {
-    *buf = (float*)malloc(sizeof(float)*MAX_BUFFER_SIZE);
-    SignalProcessing::fill(*buf, initValue, MAX_BUFFER_SIZE);
-}
 
 static inline float convertBadValuesToZero(float x) {
     /*

@@ -8,15 +8,9 @@
 #ifndef ProcessBlock_h
 #define ProcessBlock_h
 
-#ifdef _WIN32
-    #define __attribute__(A)
-#endif
-
-
 #include <cstdlib>
 #include <cmath>
 
-#include "ConstValues.h"
 #include "InlineMath.h"
 #include "SignalProcessing.h"
 #include "Buffer.h"

@@ -3,8 +3,6 @@
 //  AudioStuff
 //
 //  Created by Alexis ZBIK on 15/01/2020.
-//  Copyright © 2020 Bleass. All rights reserved.
-//
 
 #ifndef SignalProcessing_h
 #define SignalProcessing_h
@@ -12,20 +10,8 @@
 #include <cstdlib>
 #include <time.h>
 
-class BiquadState {
-public:
-    virtual ~BiquadState() {};
-public:
-    virtual void clear() = 0;
-    virtual void clearBadStateValue() = 0;
-};
-
 class SignalProcessing {
-public:
-
-    //Initialization
-    static void init();
-    
+public:    
     //Addition : z = x + y
     static void add(float* x, float* y, float* z, const size_t frameCount);
     
@@ -157,13 +143,6 @@ public:
     
     //Reverse
     static void reverse(float* data, const size_t frameCount);
-    
-    //Biquad
-    static void biquad(float* inData, float* coefficients, float* outData, const size_t frameCount, BiquadState* biquadState = nullptr);
-
-    static BiquadState* biquad_createState();
-    
-    static void biquad_destroyState(BiquadState* biquadState);
 };
 
 #endif /* SignalProcessing_h */

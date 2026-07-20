@@ -11,6 +11,8 @@
 #include "DelayRead.h"
 #include "BufferMath.h"
 
+namespace ydaisy {
+
 class DelayLineParameters {
 public:
     BlockParameter timeInMs;
@@ -24,7 +26,7 @@ public:
     timeInMs(timeInMs), feedback(feedback), reinject(reinject), wetOnly(wetOnly) {}
 };
 
-class YDelayLine : public ProcessBlock {
+class DelayLine : public ProcessBlock {
 
 private:
     DelayWrite* writers;
@@ -40,11 +42,11 @@ protected:
     };
     
 public:
-    YDelayLine(float maxDelayTimeInMs) {
+    DelayLine(float maxDelayTimeInMs) {
         maxDelayTime = maxDelayTimeInMs;
     }
     
-    ~YDelayLine() {
+    ~DelayLine() {
 
     }
     
@@ -141,5 +143,6 @@ public:
     
 };
 
+} // namespace ydaisy
 
 #endif /* DelayLine_h */

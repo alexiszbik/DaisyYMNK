@@ -24,6 +24,7 @@ public :
     void init(float sampleRate) {
         x_sr = sampleRate;
     }
+    
     void process(float *times, float *out, DelayWrite *writerBlock, int n)
     {
         DelayWrite::t_delwritectl *ctl = &(writerBlock->x_cspace);

@@ -10,22 +10,24 @@
 #define DelayLineDamped_h
 
 #include "DelayLine.h"
-#include "Filters/BiquadFilter.h"
+#include "DaisyYMNK/DSP/Filters/BiquadFilter.h"
+
+namespace ydaisy {
 
 //Damp algorithm is lowPass filter signal - signal
 
-class DelayLineDamped : public YDelayLine {
+class DelayLineDamped : public DelayLine {
 private:
     std::vector<BiquadFilter> lpFilter;
 
     Buffer workBuf;
     
 public:
-    DelayLineDamped(float maxDelayTimeInMs) : YDelayLine(maxDelayTimeInMs) {
+    DelayLineDamped(float maxDelayTimeInMs) : DelayLine(maxDelayTimeInMs) {
     }
     
     void init(int inChannelCount, double inSampleRate) override {
-        YDelayLine::init(inChannelCount, inSampleRate);
+        DelayLine::init(inChannelCount, inSampleRate);
         
         for (size_t i = 0; i < inChannelCount; i++) {
             lpFilter.push_back(BiquadFilter());
@@ -38,12 +40,12 @@ public:
     }
     
     void clear() override {
-        YDelayLine::clear();
+        DelayLine::clear();
         lpFilter.clear();
     }
     
     void process(float* dataIn, size_t n, size_t channel, float* timeInMs, float* feedback, bool reinject = true) {
-        YDelayLine::process(dataIn, n, channel, timeInMs, feedback, reinject);
+        DelayLine::process(dataIn, n, channel, timeInMs, feedback, reinject);
     }
     
     void preFeedbackProcess(float* dataIn, size_t n, size_t channel) override {
@@ -60,5 +62,6 @@ public:
     }
 };
 
+} // namespace ydaisy
 
 #endif /* DelayLineDamped_h */

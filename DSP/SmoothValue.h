@@ -48,7 +48,8 @@ private:
     
     bool valueChanged = true;
 
-    Buffer buf;
+    //TODO : Smooth value use a buffer for smooth ramped value but maybe smooth value is not used this way
+    Buffer buf; 
     bool fillOnce = false;
     size_t previousBufferSize = 0;
 };

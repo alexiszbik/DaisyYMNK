@@ -10,7 +10,6 @@
 #define DelayRead_h
 
 #include "DelayWrite.h"
-#include "InlineMath.h"
 #include "Memory.h"
 
 class DelayRead {

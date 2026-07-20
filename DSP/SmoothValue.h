@@ -10,6 +10,9 @@
 
 #pragma once
 
+#include "Buffer.h"
+#include "BufferMath.h"
+
 namespace ydaisy {
 
 class SmoothValue {
@@ -25,9 +28,13 @@ public:
     
     void dezipperCheck(long rampDuration);
 
+    void stepBy(size_t n);
+
     float getAndStep();
     
     float getGoal();
+
+    float* getAndStep(size_t bufferSize, bool& updated);
     
 private:
     void startRamp(float newGoal, long duration);
@@ -40,6 +47,10 @@ private:
     long samplesRemaining = 0;
     
     bool valueChanged = true;
+
+    Buffer buf;
+    bool fillOnce = false;
+    size_t previousBufferSize = 0;
 };
 
 }

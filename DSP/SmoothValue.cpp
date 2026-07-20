@@ -20,6 +20,7 @@ void SmoothValue::setImmediate(float value) {
     goal = this->value = value;
     inverseSlope = 0.0;
     samplesRemaining = 0;
+    fillOnce = false;
 }
 
 void SmoothValue::setValue(float value) {
@@ -67,6 +68,46 @@ float SmoothValue::getAndStep() {
     else {
         return goal;
     }
+}
+
+void SmoothValue::stepBy(size_t n) {
+
+    if (n >= samplesRemaining) {
+        samplesRemaining = 0;
+    }
+    else {
+        samplesRemaining -= n;
+    }
+}
+
+float* SmoothValue::getAndStep(size_t bufferSize, bool& updated) {
+    if (samplesRemaining != 0) {
+        float current = get();
+        float slope = -inverseSlope;
+
+        BufferMath::ramp(current, slope, buf, bufferSize);
+        
+        if (current > goal) {
+            BufferMath::clip(buf, goal, current, buf, bufferSize);
+        } else {
+            BufferMath::clip(buf, current, goal, buf, bufferSize);
+        }
+        
+        updated = true;
+        
+        stepBy(bufferSize);
+        
+        fillOnce = false;
+    }
+    else {
+        if (!fillOnce || previousBufferSize != bufferSize) {
+            BufferMath::fill(buf, goal, bufferSize);
+            fillOnce = true;
+            previousBufferSize = bufferSize;
+            updated = true;
+        }
+    }
+    return buf;
 }
 
 }

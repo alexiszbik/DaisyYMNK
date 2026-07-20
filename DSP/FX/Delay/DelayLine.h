@@ -9,9 +9,9 @@
 #include "ProcessBlock.h"
 #include "DelayWrite.h"
 #include "DelayRead.h"
-#include "SignalProcessing.h"
+#include "BufferMath.h"
 
-class DelayLineParameters : ProcessBlockParameters {
+class DelayLineParameters {
 public:
     BlockParameter timeInMs;
     BlockParameter feedback;
@@ -24,7 +24,7 @@ public:
     timeInMs(timeInMs), feedback(feedback), reinject(reinject), wetOnly(wetOnly) {}
 };
 
-class YDelayLine : public MultiChannelProcessBlock<DelayLineParameters> {
+class YDelayLine : public ProcessBlock {
 
 private:
     DelayWrite* writers;
@@ -73,11 +73,11 @@ public:
         writers[channel].process(dataIn, (int)n);
     }
     
-    void process(float* dataInOut, size_t frameCount, size_t channel, DelayLineParameters parameters) override {
+    void process(float* dataInOut, size_t frameCount, size_t channel, DelayLineParameters parameters) {
         if (parameters.timeInMs.isBuffer()) {
             process(dataInOut, frameCount, channel, parameters.timeInMs, parameters.feedback, parameters.reinject, parameters.wetOnly);
         } else {
-            SignalProcessing::fill(workBuf, 0.001f * (float)parameters.timeInMs, frameCount);
+            BufferMath::fill(workBuf, 0.001f * (float)parameters.timeInMs, frameCount);
             
             readers[channel].process((float*)workBuf, delayOutBuf, &(writers[channel]), (int)frameCount);
             
@@ -86,7 +86,7 @@ public:
                 
                 preFeedbackProcess(workBuf, frameCount, channel);
 
-                SignalProcessing::mul_s_add(workBuf, (float)parameters.feedback, dataInOut, workBuf, frameCount);
+                BufferMath::mul_s_add(workBuf, (float)parameters.feedback, dataInOut, workBuf, frameCount);
             } else {
                 if(parameters.wetOnly) {
                     memcpy(workBuf, delayOutBuf, sizeof(float)*frameCount);
@@ -106,7 +106,7 @@ public:
     
     void process(float* dataIn, size_t n, size_t channel, float* timeInMs, float* feedback, bool reinject = true, bool wetOnly = false) {
 
-        SignalProcessing::mul_s(timeInMs, 0.001f, workBuf, n);
+        BufferMath::mul_s(timeInMs, 0.001f, workBuf, n);
         
         //Get data from delay
         readers[channel].process((float*)workBuf, delayOutBuf, &(writers[channel]), (int)n);
@@ -116,7 +116,7 @@ public:
             
             preFeedbackProcess(workBuf, n, channel);
 
-            SignalProcessing::mul_add(workBuf, feedback, dataIn, workBuf, n);
+            BufferMath::mul_add(workBuf, feedback, dataIn, workBuf, n);
         
         } else { // no feedback? give the line only
             if(wetOnly) {

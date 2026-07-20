@@ -14,7 +14,7 @@
 #define DEFDELVS 64
 
 #include <cstring>
-#include "SignalProcessing.h"
+#include "BufferMath.h"
 #include "SdramPool.h"
 
 class DelayWrite  {
@@ -100,7 +100,7 @@ class DelayWrite  {
     
     void clear()
     {
-        SignalProcessing::clear((float*)x_cspace.c_vec, sizeOfArray);
+        BufferMath::clear((float*)x_cspace.c_vec, sizeOfArray);
     }
     
     void process(float* in, int n)

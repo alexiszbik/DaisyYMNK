@@ -53,9 +53,9 @@ public:
         
         lpFilter.process(workBuf, n, channel, BiquadFilterParameters(crossoverFrequency, res));
         
-        SignalProcessing::sub(workBuf, dataIn, workBuf, n);
+        BufferMath::sub(workBuf, dataIn, workBuf, n);
         
-        SignalProcessing::mul_s_add(workBuf, 0.35, dataIn, dataIn, n);
+        BufferMath::mul_s_add(workBuf, 0.35, dataIn, dataIn, n);
     }
 };
 

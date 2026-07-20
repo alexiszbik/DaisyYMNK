@@ -35,7 +35,7 @@ public:
         for (size_t i = 0; i < count; i++) {
             lines.push_back(new Dly(maxDelayTime));
             lines.back()->timeRef = inDelayTimes[i];
-            SignalProcessing::fill(lines.back()->timeBuf, inDelayTimes[i], MAX_BUFFER_SIZE);
+            BufferMath::fill(lines.back()->timeBuf, inDelayTimes[i], MAX_BUFFER_SIZE);
         }
     }
     

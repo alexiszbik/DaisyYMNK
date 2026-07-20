@@ -10,19 +10,14 @@
 #define DelayLineDamped_h
 
 #include "DelayLine.h"
-#include "BiquadFilter.h"
+#include "Filters/BiquadFilter.h"
 
 //Damp algorithm is lowPass filter signal - signal
 
 class DelayLineDamped : public YDelayLine {
-public:
-    float crossoverFrequency = 9000.0f;
-    float res = -3.f;
-    
-    float inverseNyquist;
 private:
-    BiquadFilter lpFilter = BiquadFilter(BiquadFilterType::lowPass);
-    
+    std::vector<BiquadFilter> lpFilter;
+
     Buffer workBuf;
     
 public:
@@ -32,9 +27,14 @@ public:
     void init(int inChannelCount, double inSampleRate) override {
         YDelayLine::init(inChannelCount, inSampleRate);
         
-        lpFilter.init(channelCount, sampleRate);
+        for (size_t i = 0; i < inChannelCount; i++) {
+            lpFilter.push_back(BiquadFilter());
+        }
         
-        lpFilter.windowSize = 128;
+        for (size_t i = 0; i < inChannelCount; i++) {
+            lpFilter[i].Init(sampleRate);
+            lpFilter[i].SetLowpass(9000, 0.707f);
+        }
     }
     
     void clear() override {
@@ -43,7 +43,6 @@ public:
     }
     
     void process(float* dataIn, size_t n, size_t channel, float* timeInMs, float* feedback, bool reinject = true) {
-        
         YDelayLine::process(dataIn, n, channel, timeInMs, feedback, reinject);
     }
     
@@ -51,7 +50,9 @@ public:
         
         memcpy(workBuf, dataIn, sizeof(float)*n);
         
-        lpFilter.process(workBuf, n, channel, BiquadFilterParameters(crossoverFrequency, res));
+        for (size_t i = 0; i < n; i++) {
+            workBuf[i] = lpFilter[channel].Process(workBuf[i]);
+        }
         
         BufferMath::sub(workBuf, dataIn, workBuf, n);
         

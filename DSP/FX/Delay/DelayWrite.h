@@ -1,9 +1,4 @@
-//
-//  DelayWrite.hpp
-//  Filter
-//
-//  Created by Alexis ZBIK on 21/12/2018.
-//
+
 // This is a modified version of delwrite && delread4 from pure data
 
 #ifndef DelayWrite_h

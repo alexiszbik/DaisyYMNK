@@ -1,10 +1,6 @@
 //
 //  Reveb.hpp
-//  AudioStuff
-//
-//  Created by Alexis ZBIK on 27/02/2019.
-//  Copyright © 2019 Bleass. All rights reserved.
-//
+
 
 #ifndef Reveb_h
 #define Reveb_h

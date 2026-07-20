@@ -1,7 +1,4 @@
-//
-//  DelayLine.hpp
-//  AudioStuff
-//
+
 
 #ifndef DelayLine_h
 #define DelayLine_h

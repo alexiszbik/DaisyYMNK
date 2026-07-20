@@ -1,9 +1,4 @@
-//
-//  ProcessBlock.h
-//  AudioStuff
-//
-//  Created by Alexis ZBIK on 31/12/2018.
-//
+
 
 #ifndef ProcessBlock_h
 #define ProcessBlock_h

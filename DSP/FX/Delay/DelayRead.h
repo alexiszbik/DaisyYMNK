@@ -1,10 +1,3 @@
-//
-//  DelayRead.hpp
-//  AudioStuff
-//
-//  Created by Alexis ZBIK on 26/02/2019.
-//  Copyright © 2019 Bleass. All rights reserved.
-//
 
 #ifndef DelayRead_h
 #define DelayRead_h
@@ -24,7 +17,7 @@ public :
     void init(float sampleRate) {
         x_sr = sampleRate;
     }
-    
+
     void process(float *times, float *out, DelayWrite *writerBlock, int n)
     {
         DelayWrite::t_delwritectl *ctl = &(writerBlock->x_cspace);

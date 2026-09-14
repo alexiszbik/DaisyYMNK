@@ -1,6 +1,9 @@
 #include "HID.h"
 
 HID::HID(vector<HIDElement> desc) : desc(desc) {
+    for (int i = 0; i < muxSize; i++ ) {
+        muxIndexes[i] = -1;
+    }
 }
 
 void HID::init(DaisySeed &hw) {
@@ -64,7 +67,9 @@ void HID::readMux(uint8_t channel, ModuleCore* core) {
     if (valueChanged) {
         float value = muxValues[muxIdxRead] * adcValueBump;
         if (value >= 1.f) value = 1.f;
-        core->setHIDValue(muxIndexes[muxIdxRead], value);
+        if (muxIndexes[muxIdxRead] >= 0) {
+            core->setHIDValue(muxIndexes[muxIdxRead], value);
+        }
     }
 }
 
@@ -73,7 +78,7 @@ void HID::process(DaisySeed &hw, ModuleCore* core) {
 
     if (useMux) {
         readMux(muxIdxRead, core);
-        muxIdxRead = (muxIdxRead + 1) % muxSize;
+        muxIdxRead = (muxIdxRead + 1) % muxIndexCount;
     }
 
     int k = 0;

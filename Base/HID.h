@@ -36,7 +36,8 @@ private:
 
     float muxValues[muxSize];
     int muxIndexes[muxSize];
-    uint8_t muxIndexCount = 0; 
+    uint8_t muxChannels[muxSize];
+    uint8_t muxIndexCount = 0;
 
     Mux16* mux = nullptr;
 

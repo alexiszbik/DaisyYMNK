@@ -67,16 +67,6 @@ class DelayWrite  {
             x_vecsize = vecsize;
             x_rsortno = 0;
         }
-        /*
-         LATER this should really check sample rate and blocking, once that is
-         supported.  Probably we don't actually care about vecsize.
-         For now just suppress this check. */
-        /*
-    #if 0
-        else if (vecsize != x_vecsize)
-            pd_error(x, "delread/delwrite/vd vector size mismatch");
-    #endif
-         */
     }
     
     void init(float msec, float sampleRate)

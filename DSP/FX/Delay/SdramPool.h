@@ -6,7 +6,7 @@
 #include <cstring>
 #include <cstdint>
 
-#define SDRAM_POOL_SIZE (512 * 1024)
+#define SDRAM_POOL_SIZE (1024 * 1024)
 
 extern char sdram_pool[];
 

@@ -12,6 +12,7 @@
 #include "SignalProcessing.h"
 #include "SmoothValue.h"
 #include "MuteController.h"
+#include "Memory.h"
 
 #include "Env/AttackDecay.h"
 #include "Env/SynthEnv.h"

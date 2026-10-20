@@ -1,6 +1,9 @@
 #include "HID.h"
 
 HID::HID(vector<HIDElement> desc) : desc(desc) {
+    for (int i = 0; i < muxSize; i++ ) {
+        muxIndexes[i] = -1;
+    }
 }
 
 void HID::init(DaisySeed &hw) {
@@ -38,8 +41,9 @@ void HID::init(DaisySeed &hw) {
                 );
                 adcConfig[0].InitSingle(seed::A0);
             }
-            muxIndexes[hidElmt.pin.pin] = hidElmt.index;  
-            muxIndexCount++;                
+            muxChannels[muxIndexCount] = hidElmt.pin.pin;
+            muxIndexes[hidElmt.pin.pin] = hidElmt.index;
+            muxIndexCount++;
         } else {
             auto pin = hw.GetPin(hidElmt.pin.pin);
 
@@ -62,9 +66,11 @@ void HID::readMux(uint8_t channel, ModuleCore* core) {
     bool valueChanged = false;
     muxValues[channel] = mux->Read(channel, valueChanged);
     if (valueChanged) {
-        float value = muxValues[muxIdxRead] * adcValueBump;
+        float value = muxValues[channel] * adcValueBump;
         if (value >= 1.f) value = 1.f;
-        core->setHIDValue(muxIndexes[muxIdxRead], value);
+        if (muxIndexes[channel] >= 0) {
+            core->setHIDValue(muxIndexes[channel], value);
+        }
     }
 }
 
@@ -72,8 +78,8 @@ void HID::readMux(uint8_t channel, ModuleCore* core) {
 void HID::process(DaisySeed &hw, ModuleCore* core) {
 
     if (useMux) {
-        readMux(muxIdxRead, core);
-        muxIdxRead = (muxIdxRead + 1) % muxSize;
+        readMux(muxChannels[muxIdxRead], core);
+        muxIdxRead = (muxIdxRead + 1) % muxIndexCount;
     }
 
     int k = 0;

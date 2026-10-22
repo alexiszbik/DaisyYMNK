@@ -58,4 +58,18 @@ inline float clamp01(float x) noexcept
     return fminf(fmaxf(x, 0.f), 1.f);
 }
 
+// Maps value in [0, 1] to an integer in [min, max] (inclusive).
+inline int valueMapIndex(float value, int min, int max) {
+    if (max <= min) {
+        return min;
+    }
+    value = clamp01(value);
+    const int span = max - min;
+    int index = static_cast<int>(value * static_cast<float>(span + 1));
+    if (index > span) {
+        index = span;
+    }
+    return min + index;
+}
+
 }

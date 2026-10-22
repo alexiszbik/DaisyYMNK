@@ -2,10 +2,12 @@
 #pragma once
 
 #include "DSPKernel.h"
+#include "SyncedDSPKernel.h"
 #include "HIDElement.h"
 #include "Macros.h"
 #include "MidiMessageType.h"
 #include "ModuleCore.h"
+#include "SyncedModuleCore.h"
 #include "Parameter.h"
 #include "ParameterDesc.h"
 #include "Preset.h"

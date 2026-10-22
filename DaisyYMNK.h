@@ -11,9 +11,11 @@
 #include "Mux/Mux16.h"
 
 #include "DSP/DSPKernel.h"
+#include "DSP/SyncedDSPKernel.h"
 #include "DSP/HIDElement.h"
 
 #include "DSP/ModuleCore.h"
+#include "DSP/SyncedModuleCore.h"
 #include "DSP/Parameter.h"
 #include "DSP/ParameterDesc.h"
 #include "DSP/Preset.h"

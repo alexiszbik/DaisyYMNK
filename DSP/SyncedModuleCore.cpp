@@ -25,15 +25,15 @@ void SyncedModuleCore::processMIDI(MIDIMessageType messageType, int channel, int
 {
     ModuleCore::processMIDI(messageType, channel, dataA, dataB);
 
-    if (channel == kCommonChannel)
-    {
-        if (dataA == 10)
-        {
+    if (messageType == MIDIMessageType::kControlChange && channel == kCommonChannel) {
+        if (dataA == 10) {
             double newTempo = dataB + 60;
-            //mixBuses.setTempo(newTempo);
             syncKernel->setTempo(newTempo);
         }
-        return;
+    } else if (messageType == MIDIMessageType::kNoteOn && channel == kDrumChannel) {
+        if (dataA == kKickNote && dataB > 0) {
+            syncKernel->trigKick();
+        }
     }
 }
 

@@ -23,6 +23,8 @@ public:
     void setTempo(double tempo);
     double getTempo() const;
 
+    virtual void trigKick();
+
 private:
     double tempo = 120.0;
 

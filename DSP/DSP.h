@@ -14,6 +14,7 @@
 #include "SignalProcessing.h"
 #include "SmoothValue.h"
 #include "MuteController.h"
+#include "KickSidechainController.h"
 #include "Memory.h"
 
 #include "Env/AttackDecay.h"

@@ -27,4 +27,8 @@ double SyncedDSPKernel::getTempo() const {
     return tempo;
 }
 
+void SyncedDSPKernel::trigKick() {
+
+}
+
 }

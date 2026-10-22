@@ -24,7 +24,7 @@ void StereoChorus::Init(float sampleRate)
     SetLfoDepth(0.9f);
 }
 
-float StereoChorus::Process(float in, int channel)
+float StereoChorus::Process(float in, int channel, float level)
 {
     float lfo = ProcessLfo(channel);
     del_[channel].SetDelay(lfo + delay_);
@@ -32,7 +32,8 @@ float StereoChorus::Process(float in, int channel)
     float wet = del_[channel].Read();
     del_[channel].Write(in + hpFilter[channel].Process(wet * feedback_));
 
-    return (in + wet) * 0.5957f; //-4.5db
+    const float full = (in + wet) * 0.5957f; //-4.5db
+    return in + level * (full - in);
 }
 
 void StereoChorus::SetFeedback(float feedback)

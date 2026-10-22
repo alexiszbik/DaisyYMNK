@@ -12,7 +12,8 @@ public:
 
     // Process one sample for the given channel (0 = left, 1 = right).
     // Channels must be called in order: 0 then 1 for each sample.
-    float Process(float in, int channel);
+    // level: 0 = dry input only, 1 = (in + wet) * -4.5 dB.
+    float Process(float in, int channel, float level);
 
     void SetFeedback(float feedback);
     void SetLfoDepth(float depth);

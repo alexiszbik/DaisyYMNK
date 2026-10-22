@@ -1,26 +1,24 @@
 #pragma once
 
-#include "SmoothValue.h"
+#include "Env/AttackDecay.h"
 
 namespace ydaisy {
 
 class KickSidechainController {
 public:
+    static constexpr float kAttackTimeMs = 5.f;
+
     void init(float sampleRate);
     void setTempo(double tempo);
-    void setDepth(float depth);
-    float getDepth() const { return depth; }
 
     void trigger();
-    void process(float** buf, int channelCount, int frameCount);
+    void process(float** buf, int channelCount, int frameCount, const float* depthBuf);
 
 private:
-    long releaseSamplesForTempo() const;
+    float releaseTimeSec() const;
 
-    SmoothValue gain;
-    float sampleRate = 48000.f;
+    AttackDecay env;
     double tempo = 120.0;
-    float depth = 0.f;
 };
 
 }

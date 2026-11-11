@@ -18,6 +18,7 @@ namespace ydaisy {
 static constexpr uint8_t kCommonChannel = 12; //Channel 13
 static constexpr uint8_t kDrumChannel = 3; //Channel 4
 static constexpr uint8_t kKickNote = 36;
+static constexpr uint8_t tempoChangeCC = 10;
 
 class SyncedModuleCore : public ModuleCore {
 

@@ -26,7 +26,7 @@ void SyncedModuleCore::processMIDI(MIDIMessageType messageType, int channel, int
     ModuleCore::processMIDI(messageType, channel, dataA, dataB);
 
     if (messageType == MIDIMessageType::kControlChange && channel == kCommonChannel) {
-        if (dataA == 10) {
+        if (dataA == tempoChangeCC) {
             double newTempo = dataB + 60;
             syncKernel->setTempo(newTempo);
         }

@@ -16,8 +16,6 @@
 #include "Parameter.h"
 #include "Preset.h"
 
-#define MIDI_CTRL_START 10
-
 #if defined _SIMULATOR_
 #include <iostream>
 #endif
@@ -28,7 +26,10 @@ namespace ydaisy {
 
 class DSPKernel {
 public:
-    DSPKernel(vector<ParameterDesc> parameterDescriptors);
+    static constexpr int kDefaultMidiCCStart = 10;
+
+    // Parameter i is mapped to MIDI CC (midiCCStart + i).
+    DSPKernel(vector<ParameterDesc> parameterDescriptors, int midiCCStart = kDefaultMidiCCStart);
     virtual ~DSPKernel();
     
 public:
@@ -74,6 +75,7 @@ protected:
     
 private:
     vector<Parameter*> parameters;
+    const int midiCCStart;
     int lastChangedParameterIndex = 0;
     MuteController muteController;
 };

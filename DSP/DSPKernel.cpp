@@ -14,7 +14,8 @@
 
 namespace ydaisy {
 
-DSPKernel::DSPKernel(vector<ParameterDesc> parameterDescriptors)
+DSPKernel::DSPKernel(vector<ParameterDesc> parameterDescriptors, int midiCCStart)
+    : midiCCStart(midiCCStart)
 {
     for (auto& paramDesc : parameterDescriptors) {
         Parameter* p = new Parameter(paramDesc);
@@ -122,7 +123,7 @@ void DSPKernel::processMIDI(MIDIMessageType messageType, int channel, int dataA,
             if (muteController.processMIDI(messageType, dataA, dataB)) {
                 break;
             }
-            int parameterIdx = dataA - MIDI_CTRL_START;
+            int parameterIdx = dataA - midiCCStart;
             if (parameterIdx >= 0 && parameterIdx < static_cast<int>(parameters.size())) {
                 setParameterValue(parameterIdx, ((float)dataB)/127.f);
             }

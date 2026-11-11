@@ -17,7 +17,7 @@ namespace ydaisy {
 class SyncedDSPKernel : public DSPKernel {
 
 public:
-    SyncedDSPKernel(vector<ParameterDesc> parameterDescriptors);
+    SyncedDSPKernel(vector<ParameterDesc> parameterDescriptors, int midiCCStart = kDefaultMidiCCStart);
     virtual ~SyncedDSPKernel();
 
     void setTempo(double tempo);

@@ -12,8 +12,8 @@
 
 namespace ydaisy {
 
-SyncedDSPKernel::SyncedDSPKernel(vector<ParameterDesc> parameterDescriptors)
-    : DSPKernel(parameterDescriptors) {
+SyncedDSPKernel::SyncedDSPKernel(vector<ParameterDesc> parameterDescriptors, int midiCCStart)
+    : DSPKernel(parameterDescriptors, midiCCStart) {
 }
 
 SyncedDSPKernel::~SyncedDSPKernel() {
